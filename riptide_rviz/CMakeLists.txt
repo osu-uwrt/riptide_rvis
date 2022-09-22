@@ -9,9 +9,11 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rclcpp_action REQUIRED)
+find_package(std_srvs REQUIRED)
 find_package(rviz_common REQUIRED)
 find_package(Qt5 COMPONENTS Widgets Core REQUIRED)
 find_package(pluginlib REQUIRED)
+find_package(resource_retriever REQUIRED)
 
 # Qt5 boilerplate options from http://doc.qt.io/qt-5/cmake-manual.html
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -20,37 +22,72 @@ set(CMAKE_AUTOMOC ON)
 # pick up headerfiles
 include_directories(include)
 
+# pick up soirce files to build
+file(GLOB SRC_FILES ${PROJECT_SOURCE_DIR}/src/*.cpp)
+
+# pick up headers to moc
+file(GLOB MOC_HEADERS ${PROJECT_SOURCE_DIR}/include/riptide_rviz/*.hpp)
+
+# moc the headers
+foreach(header "${MOC_HEADERS}")
+  qt5_wrap_cpp(MOC_FILES "${header}") # this should spit out the moc files for each header
+endforeach()
+
 # add all of the source files here
 add_library(${PROJECT_NAME} SHARED
-            src/control_panel.cpp
+            ${SRC_FILES}
+            ${MOC_FILES}
 )
 
-# Link ament packages
-ament_target_dependencies(${PROJECT_NAME} rclcpp rviz_common rclcpp_action std_srvs interaction_msgs)
-
-# Link non ament packages
-target_link_libraries(${PROJECT_NAME} Qt5::Widgets)
+# Causes the visibility macros to use dllexport rather than dllimport,
+# which is appropriate when building the dll but not consuming it.
+target_compile_definitions(${PROJECT_NAME} PRIVATE "RVIZ_DEFAULT_PLUGINS_BUILDING_LIBRARY")
 
 # prevent pluginlib from using boost
 target_compile_definitions(${PROJECT_NAME} PUBLIC "PLUGINLIB__DISABLE_BOOST_FUNCTIONS")
 
-# install the plugin into lib
-install(TARGETS ${PROJECT_NAME}
-  DESTINATION lib/${PROJECT_NAME}
-  )
+pluginlib_export_plugin_description_file(rviz_common plugins_description.xml)
 
-# export button icons for the plugin
-install(DIRECTORY data
- DESTINATION share/${PROJECT_NAME})
+# Link ament packages
+ament_target_dependencies(${PROJECT_NAME} 
+  rclcpp 
+  rclcpp_action
+  rviz_common  
+  std_srvs
+)
 
+# Link non ament packages
+target_link_libraries(${PROJECT_NAME} Qt5::Widgets)
 
-# export the plugin icons shown by RVIZ
+# Export old-style CMake variables
+ament_export_include_directories("include/${PROJECT_NAME}")
+
+# Export modern CMake targets
+ament_export_targets(${PROJECT_NAME} HAS_LIBRARY_TARGET)
+
+ament_export_dependencies(
+  rclcpp
+  rclcpp_action
+  resource_retriever
+)
+
+install(
+  TARGETS ${PROJECT_NAME}
+  EXPORT ${PROJECT_NAME}
+  ARCHIVE DESTINATION lib
+  LIBRARY DESTINATION lib
+  RUNTIME DESTINATION bin
+)
+
+install(
+  DIRECTORY include/
+  DESTINATION include/${PROJECT_NAME}
+)
+
 install(
   DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/icons"
-  DESTINATION "share/${PROJECT_NAME}")
-
-
-pluginlib_export_plugin_description_file(rviz_common plugins_description.xml)
+  DESTINATION "share/${PROJECT_NAME}"
+)
 
 ament_export_libraries(${PROJECT_NAME})
 
