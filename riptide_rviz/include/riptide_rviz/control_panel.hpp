@@ -32,11 +32,12 @@ namespace riptide_rviz
 
     private:
         QVBoxLayout *layout;
-        QHBoxLayout *startup;
+        QHBoxLayout *bringup, *ctrl;
         QComboBox *bringupHost, *bringupFile;
-        QPushButton *bringupStart, *bringupStop;
+        QPushButton *bringupStart, *bringupStop, *ctrlCmdPos, *ctrlCmdVel,
+            *ctrlCmdFFD, *ctrlCmdTele, *ctrlEnable, *ctrlDisable;
 
-        // QLabel *label;
+        QLabel *ctrlModeLabel, *ctrlStatLabel;
         // void discover_ns();
     };
 

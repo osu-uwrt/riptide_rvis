@@ -16,42 +16,67 @@ namespace riptide_rviz
         // overall panel layout
         layout = new QVBoxLayout();
 
-        // top slice for startup
-        startup = new QHBoxLayout();
-
-        // create the dropdown lists
+        // create the bringup dropdown lists
         bringupHost = new QComboBox(this);
         bringupHost->setEditable(false);
         bringupHost->setFrame(true);
         bringupHost->insertItems(0, QStringList(QString("Computer 1")));
-
         bringupFile = new QComboBox(this);
         bringupFile->setEditable(false);
         bringupFile->setFrame(true);
         bringupFile->insertItems(0, QStringList(QString("bringup.py")));
 
-        bringupStart = new QPushButton(this);
-        bringupStart->setText("Start Code");
-
-        bringupStop = new QPushButton(this);
-        bringupStop->setText("Stop Code");
-
+        // make the bringup buttons
+        bringupStart = new QPushButton("Start Code", this);
+        bringupStart->setStyleSheet("QPushButton {background-color: green;}");
+        bringupStop = new QPushButton("Stop Code", this);
+        bringupStop->setStyleSheet("QPushButton {background-color: red;}");
+        bringupStop->setDisabled(true);
 
         // define the layout of the bringup section
+        bringup = new QHBoxLayout();
         QVBoxLayout *bringupSelectors = new QVBoxLayout();
         bringupSelectors->addWidget(bringupHost);
         bringupSelectors->addWidget(bringupFile);
-        startup->addLayout(bringupSelectors);
+        bringup->addLayout(bringupSelectors);
         QVBoxLayout *bringupButtons = new QVBoxLayout();
         bringupButtons->addWidget(bringupStart);
         bringupButtons->addWidget(bringupStop);
-        startup->addLayout(bringupButtons);
+        bringup->addLayout(bringupButtons);
+
+        // handle the controller command layout
+        ctrlCmdPos = new QPushButton("Position", this);
+        ctrlCmdPos->setStyleSheet("QPushButton {background-color: #A3C1DA;}"); // the active mode
+        ctrlCmdVel = new QPushButton("Velocity", this);
+        ctrlCmdFFD = new QPushButton("FeedFwd", this);
+        ctrlCmdTele = new QPushButton("Teleop", this);
+
+        ctrlEnable = new QPushButton("Enable", this);
+        ctrlEnable->setStyleSheet("QPushButton {background-color: green;}");
+        ctrlDisable = new QPushButton("Disable", this);
+        ctrlDisable->setStyleSheet("QPushButton {background-color: red;}");
+        ctrlDisable->setDisabled(true);
+
+        // define control layout
+        ctrl = new QHBoxLayout();
+        QVBoxLayout *ctrlModeLayout = new QVBoxLayout();
+        ctrlModeLayout->addWidget(ctrlCmdPos);
+        ctrlModeLayout->addWidget(ctrlCmdVel);
+        ctrlModeLayout->addWidget(ctrlCmdFFD);
+        ctrlModeLayout->addWidget(ctrlCmdTele);
+        ctrl->addLayout(ctrlModeLayout);
+        QVBoxLayout *ctrlEnableLayout = new QVBoxLayout();
+        ctrlEnableLayout->addWidget(ctrlEnable);
+        ctrlEnableLayout->addWidget(ctrlDisable);
+        ctrl->addLayout(ctrlEnableLayout);
+
         
 
 
 
         // register the parent layout to the widget
-        layout->addLayout(startup);
+        layout->addLayout(bringup);
+        layout->addLayout(ctrl);
         setLayout(layout);
     }
 
@@ -71,10 +96,13 @@ namespace riptide_rviz
 
     ControlPanel::~ControlPanel(){
         // master window control removal
-        delete layout, startup;
+        delete layout, bringup, ctrl;
 
         // bringup panel destruction
         delete bringupHost, bringupFile, bringupStart, bringupStop;
+
+        // controller panel distruction
+        delete ctrlCmdPos, ctrlCmdVel, ctrlCmdFFD, ctrlCmdTele, ctrlEnable, ctrlDisable;
     }
 
 } // namespace riptide_rviz
