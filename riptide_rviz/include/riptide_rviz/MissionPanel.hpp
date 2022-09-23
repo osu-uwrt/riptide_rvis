@@ -7,18 +7,14 @@
 #include <rviz_common/panel.hpp>
 #include <rviz_common/config.hpp>
 
-#include <QLabel>
-#include <QVBoxLayout>
-#include <QHBoxLayout>
-#include <QComboBox>
-#include <QPushButton>
+#include "ui_MissionPanel.h"
 
 namespace riptide_rviz
 {
-    class ControlPanel : public rviz_common::Panel
+    class MissionPanel : public rviz_common::Panel
     {
-        Q_OBJECT public : ControlPanel(QWidget *parent = 0);
-        ~ControlPanel();
+        Q_OBJECT public : MissionPanel(QWidget *parent = 0);
+        ~MissionPanel();
 
         virtual void load(const rviz_common::Config &config);
         virtual void save(rviz_common::Config config) const;
@@ -31,13 +27,7 @@ namespace riptide_rviz
         bool event(QEvent *event);
 
     private:
-        QVBoxLayout *layout;
-        QHBoxLayout *bringup, *ctrl;
-        QComboBox *bringupHost, *bringupFile;
-        QPushButton *bringupStart, *bringupStop, *ctrlCmdPos, *ctrlCmdVel,
-            *ctrlCmdFFD, *ctrlCmdTele, *ctrlEnable, *ctrlDisable;
-
-        QLabel *ctrlModeLabel, *ctrlStatLabel;
+        Ui_MissionPanel *uiPanel;
         // void discover_ns();
     };
 

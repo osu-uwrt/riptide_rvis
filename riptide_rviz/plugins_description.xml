@@ -4,4 +4,9 @@
             RVIZ plugin for controlling Tempest Underwater
         </description>
     </class>
+    <class name="riptide_rviz/MissionPanel" type="riptide_rviz::MissionPanel" base_class_type="rviz_common::Panel">
+        <description>
+            RVIZ plugin for controlling riptide autonomy while underwater
+        </description>
+    </class>
 </library>

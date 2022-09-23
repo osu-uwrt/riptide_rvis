@@ -28,15 +28,20 @@ file(GLOB SRC_FILES ${PROJECT_SOURCE_DIR}/src/*.cpp)
 # pick up headers to moc
 file(GLOB MOC_HEADERS ${PROJECT_SOURCE_DIR}/include/riptide_rviz/*.hpp)
 
+file(GLOB UIS ${PROJECT_SOURCE_DIR}/src/*.ui)
+
 # moc the headers
 foreach(header "${MOC_HEADERS}")
   qt5_wrap_cpp(MOC_FILES "${header}") # this should spit out the moc files for each header
 endforeach()
 
+QT5_WRAP_UI( UI_HEADERS ${UIS} )
+
 # add all of the source files here
 add_library(${PROJECT_NAME} SHARED
             ${SRC_FILES}
             ${MOC_FILES}
+            ${UI_HEADERS}
 )
 
 # Causes the visibility macros to use dllexport rather than dllimport,
