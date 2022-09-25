@@ -29,6 +29,7 @@ namespace riptide_rviz
         void bringupListRefresh();
         void handleBringupHost(int selection);
         void startBringup();
+        void checkBringupStatus();
 
     protected:
         bool event(QEvent *event);
