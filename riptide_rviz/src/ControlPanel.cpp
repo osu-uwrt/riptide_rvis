@@ -19,7 +19,7 @@ namespace riptide_rviz
         nodeHandle = std::make_shared<rclcpp::Node>("riptide_rviz_control");
 
         // create and cancel the bringup timer
-        bringupCheckTimer = nodeHandle->create_wall_timer(100ms, std::bind(&ControlPanel::checkBringupStatus, this));
+        bringupCheckTimer = nodeHandle->create_wall_timer(BRINGUP_POLLING_RATE, std::bind(&ControlPanel::checkBringupStatus, this));
         bringupCheckTimer->cancel();
 
         // refresh UI elements so they start displayed correctly

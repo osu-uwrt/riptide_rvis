@@ -13,6 +13,7 @@
 #include "ui_ControlPanel.h"
 
 #define BRINGUP_PKG "riptide_bringup2"
+#define BRINGUP_POLLING_RATE 1s
 
 namespace riptide_rviz
 {
