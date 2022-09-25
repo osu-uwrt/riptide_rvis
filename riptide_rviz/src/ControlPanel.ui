@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>392</width>
+    <width>305</width>
     <height>535</height>
    </rect>
   </property>
@@ -18,7 +18,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>390</width>
+     <width>301</width>
      <height>523</height>
     </rect>
    </property>
@@ -77,7 +77,7 @@
         </widget>
        </item>
        <item row="2" column="0">
-        <widget class="QPushButton" name="pushButton">
+        <widget class="QPushButton" name="bringupRefresh">
          <property name="text">
           <string>Refresh</string>
          </property>
@@ -167,12 +167,18 @@
         <property name="text">
          <string>Control Mode:</string>
         </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
        </widget>
       </item>
       <item row="0" column="1">
        <widget class="QLabel" name="label_2">
         <property name="text">
          <string>Robot Status:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
         </property>
        </widget>
       </item>
@@ -211,6 +217,9 @@
           <property name="text">
            <string>X</string>
           </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
          </widget>
         </item>
         <item row="0" column="2">
@@ -218,12 +227,18 @@
           <property name="text">
            <string>Z</string>
           </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
          </widget>
         </item>
         <item row="0" column="4">
          <widget class="QLabel" name="label_18">
           <property name="text">
            <string>P</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
           </property>
          </widget>
         </item>
@@ -267,12 +282,18 @@
           <property name="text">
            <string>Y</string>
           </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
          </widget>
         </item>
         <item row="0" column="5">
          <widget class="QLabel" name="label_19">
           <property name="text">
            <string>Y</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
           </property>
          </widget>
         </item>
@@ -287,6 +308,9 @@
          <widget class="QLabel" name="label_17">
           <property name="text">
            <string>R</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
           </property>
          </widget>
         </item>

@@ -10,6 +10,10 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rclcpp_action REQUIRED)
 find_package(std_srvs REQUIRED)
+find_package(launch_msgs REQUIRED)
+find_package(ament_index_cpp REQUIRED)
+
+# rviz specific deps
 find_package(rviz_common REQUIRED)
 find_package(Qt5 COMPONENTS Widgets Core REQUIRED)
 find_package(pluginlib REQUIRED)
@@ -44,6 +48,8 @@ add_library(${PROJECT_NAME} SHARED
             ${UI_HEADERS}
 )
 
+set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 17)
+
 # Causes the visibility macros to use dllexport rather than dllimport,
 # which is appropriate when building the dll but not consuming it.
 target_compile_definitions(${PROJECT_NAME} PRIVATE "RVIZ_DEFAULT_PLUGINS_BUILDING_LIBRARY")
@@ -59,6 +65,8 @@ ament_target_dependencies(${PROJECT_NAME}
   rclcpp_action
   rviz_common  
   std_srvs
+  launch_msgs
+  ament_index_cpp
 )
 
 # Link non ament packages
@@ -73,7 +81,9 @@ ament_export_targets(${PROJECT_NAME} HAS_LIBRARY_TARGET)
 ament_export_dependencies(
   rclcpp
   rclcpp_action
+  launch_msgs
   resource_retriever
+  ament_index_cpp
 )
 
 install(
