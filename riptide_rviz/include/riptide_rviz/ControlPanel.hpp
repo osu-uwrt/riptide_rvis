@@ -12,6 +12,8 @@
 
 #include "ui_ControlPanel.h"
 
+#define BRINGUP_PKG "riptide_bringup2"
+
 namespace riptide_rviz
 {
     class ControlPanel : public rviz_common::Panel
@@ -26,6 +28,7 @@ namespace riptide_rviz
         // QT slots (function callbacks)
         void bringupListRefresh();
         void handleBringupHost(int selection);
+        void startBringup();
 
     protected:
         bool event(QEvent *event);
@@ -40,6 +43,8 @@ namespace riptide_rviz
         rclcpp::Client<launch_msgs::srv::ListLaunch>::SharedPtr bringupListClient;
         rclcpp::Client<launch_msgs::srv::StopLaunch>::SharedPtr bringupStopClient;
         rclcpp::TimerBase::SharedPtr bringupCheckTimer;
+        int bringupID = -1;
+
         // void discover_ns();
     };
 
