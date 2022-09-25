@@ -26,8 +26,8 @@ namespace riptide_rviz
         bringupListRefresh();
 
         // connect the UI signals
-        connect(uiPanel->bringupRefresh, &QPushButton::clicked, [this](void)
-                { bringupListRefresh(); });
+        connect(uiPanel->bringupRefresh, &QPushButton::clicked, [this](void){ bringupListRefresh(); });
+        connect(uiPanel->bringupStart, &QPushButton::clicked, [this](void){ startBringup(); });
         connect(uiPanel->bringupHost, SIGNAL(currentIndexChanged(int)), SLOT(handleBringupHost(int)));
     }
 
