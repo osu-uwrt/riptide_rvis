@@ -1,3 +1,4 @@
+#pragma once
 #include <rclcpp/rclcpp.hpp>
 #include <rclcpp_action/rclcpp_action.hpp>
 #include <std_srvs/srv/set_bool.hpp>
@@ -11,6 +12,7 @@
 #include <rviz_common/config.hpp>
 
 #include "ui_ControlPanel.h"
+#include <QTimer>
 
 #define BRINGUP_PKG "riptide_bringup2"
 #define BRINGUP_POLLING_RATE 1s
@@ -22,8 +24,10 @@ namespace riptide_rviz
         Q_OBJECT public : ControlPanel(QWidget *parent = 0);
         ~ControlPanel();
 
-        virtual void load(const rviz_common::Config &config);
-        virtual void save(rviz_common::Config config) const;
+        void load(const rviz_common::Config &config) override;
+        void save(rviz_common::Config config) const override;
+
+        void onInitialize() override;
 
     protected Q_SLOTS:
         // QT slots (function callbacks)
@@ -31,23 +35,24 @@ namespace riptide_rviz
         void handleBringupHost(int selection);
         void startBringup();
         void checkBringupStatus();
+        void stopBringup();
 
     protected:
         bool event(QEvent *event);
 
     private:
+        // UI Panel instance
         Ui_ControlPanel *uiPanel;
 
-        // ros node for the panel. we have to spawn our own.
-        rclcpp::Node::SharedPtr nodeHandle;
+        rclcpp::Node::SharedPtr clientNode;
+        QTimer * spinTimer;
 
+        // Bringup clients
         rclcpp::Client<launch_msgs::srv::StartLaunch>::SharedPtr bringupStartClient;
         rclcpp::Client<launch_msgs::srv::ListLaunch>::SharedPtr bringupListClient;
         rclcpp::Client<launch_msgs::srv::StopLaunch>::SharedPtr bringupStopClient;
-        rclcpp::TimerBase::SharedPtr bringupCheckTimer;
+        QTimer * bringupCheckTimer;
         int bringupID = -1;
-
-        // void discover_ns();
     };
 
 } // namespace riptide_rviz

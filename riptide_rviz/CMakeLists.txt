@@ -15,6 +15,7 @@ find_package(ament_index_cpp REQUIRED)
 
 # rviz specific deps
 find_package(rviz_common REQUIRED)
+find_package(rviz_ogre_vendor REQUIRED)
 find_package(Qt5 COMPONENTS Widgets Core REQUIRED)
 find_package(pluginlib REQUIRED)
 find_package(resource_retriever REQUIRED)
@@ -70,7 +71,11 @@ ament_target_dependencies(${PROJECT_NAME}
 )
 
 # Link non ament packages
-target_link_libraries(${PROJECT_NAME} Qt5::Widgets)
+target_link_libraries(${PROJECT_NAME} 
+  Qt5::Widgets
+  rviz_ogre_vendor::OgreMain
+  rviz_ogre_vendor::OgreOverlay
+)
 
 # Export old-style CMake variables
 ament_export_include_directories("include/${PROJECT_NAME}")
@@ -82,6 +87,7 @@ ament_export_dependencies(
   rclcpp
   rclcpp_action
   launch_msgs
+  rviz_ogre_vendor
   resource_retriever
   ament_index_cpp
 )
