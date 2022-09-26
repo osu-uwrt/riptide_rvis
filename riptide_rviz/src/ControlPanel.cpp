@@ -23,12 +23,6 @@ namespace riptide_rviz
 
     void ControlPanel::onInitialize()
     {
-
-        // create and cancel the bringup timer
-        bringupCheckTimer = new QTimer(this);
-        connect(bringupCheckTimer, &QTimer::timeout, [this](void)
-                { checkBringupStatus(); });
-
         // refresh UI elements so they start displayed correctly
         bringupListRefresh();
 
@@ -38,7 +32,11 @@ namespace riptide_rviz
                 { rclcpp::spin_some(clientNode); });
         spinTimer->start(50);
 
-        // connect the UI signals
+        // Connect UI signals for bringup
+        // create the bringup timer
+        bringupCheckTimer = new QTimer(this);
+        connect(bringupCheckTimer, &QTimer::timeout, [this](void)
+                { checkBringupStatus(); });
         connect(uiPanel->bringupRefresh, &QPushButton::clicked, [this](void)
                 { bringupListRefresh(); });
         connect(uiPanel->bringupStart, &QPushButton::clicked, [this](void)
