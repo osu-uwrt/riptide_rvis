@@ -243,11 +243,11 @@ namespace riptide_rviz
         degreeReadout = !degreeReadout;
         if (degreeReadout)
         {
-            uiPanel->ctrlDegOrRad->setText("Radians");
+            uiPanel->ctrlDegOrRad->setText("Degrees");
         }
         else
         {
-            uiPanel->ctrlDegOrRad->setText("Degrees");
+            uiPanel->ctrlDegOrRad->setText("Radians");
         }
     }
 

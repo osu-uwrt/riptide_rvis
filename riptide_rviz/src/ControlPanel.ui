@@ -2,12 +2,15 @@
 <ui version="4.0">
  <class>ControlPanel</class>
  <widget class="QWidget" name="ControlPanel">
+  <property name="enabled">
+   <bool>true</bool>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>456</width>
-    <height>568</height>
+    <width>384</width>
+    <height>343</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,7 +21,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>341</width>
+     <width>371</width>
      <height>331</height>
     </rect>
    </property>
@@ -147,7 +150,7 @@ QPushButton:!enabled{color:white; background: rgb(140, 100, 100)}</string>
       <item>
        <widget class="QCheckBox" name="ctrlRequireKill">
         <property name="text">
-         <string>Require Kill</string>
+         <string>Req Kill</string>
         </property>
        </widget>
       </item>
@@ -190,6 +193,13 @@ QLabel:!enabled{color: red;}</string>
          </size>
         </property>
        </spacer>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_3">
+        <property name="text">
+         <string>Angles:</string>
+        </property>
+       </widget>
       </item>
       <item>
        <widget class="QPushButton" name="ctrlDegOrRad">
@@ -412,6 +422,9 @@ QLabel:!enabled{color: red;}</string>
          <widget class="QPushButton" name="CtrlSendCmd">
           <property name="enabled">
            <bool>false</bool>
+          </property>
+          <property name="styleSheet">
+           <string notr="true"/>
           </property>
           <property name="text">
            <string>Command</string>
