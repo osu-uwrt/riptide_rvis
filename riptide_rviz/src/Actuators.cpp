@@ -1,15 +1,16 @@
-#include "riptide_rviz/ControlPanel.hpp"
+#include "riptide_rviz/Actuators.hpp"
 #include <chrono>
+
 
 using namespace std::chrono_literals;
 
 namespace riptide_rviz
 {
-    ControlPanel::ControlPanel(QWidget *parent) : rviz_common::Panel(parent)
+    Actuators::Actuators(QWidget *parent) : rviz_common::Panel(parent)
     {
         setFocusPolicy(Qt::ClickFocus);
 
-        uiPanel = new Ui_ControlPanel();
+        uiPanel = new Ui_Actuators();
         uiPanel->setupUi(this);
 
         auto options = rclcpp::NodeOptions().arguments(
@@ -17,7 +18,7 @@ namespace riptide_rviz
         clientNode = std::make_shared<rclcpp::Node>("_", options);
     }
 
-    void ControlPanel::onInitialize()
+    void Actuators::onInitialize()
     {
         // create a spin timer
         spinTimer = new QTimer(this);
@@ -28,21 +29,21 @@ namespace riptide_rviz
         // Connect UI signals for controlling the riptide vehicle
     }
 
-    void ControlPanel::load(const rviz_common::Config &config)
+    void Actuators::load(const rviz_common::Config &config)
     {
         rviz_common::Panel::load(config);
     }
 
-    void ControlPanel::save(rviz_common::Config config) const
+    void Actuators::save(rviz_common::Config config) const
     {
         rviz_common::Panel::save(config);
     }
 
-    bool ControlPanel::event(QEvent *event)
+    bool Actuators::event(QEvent *event)
     {
     }
 
-    ControlPanel::~ControlPanel()
+    Actuators::~Actuators()
     {
         // master window control removal
         delete uiPanel;
@@ -54,4 +55,4 @@ namespace riptide_rviz
 } // namespace riptide_rviz
 
 #include <pluginlib/class_list_macros.hpp> // NOLINT
-PLUGINLIB_EXPORT_CLASS(riptide_rviz::ControlPanel, rviz_common::Panel);
+PLUGINLIB_EXPORT_CLASS(riptide_rviz::Actuators, rviz_common::Panel);

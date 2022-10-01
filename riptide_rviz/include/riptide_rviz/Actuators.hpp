@@ -7,15 +7,15 @@
 #include <rviz_common/panel.hpp>
 #include <rviz_common/config.hpp>
 
-#include "ui_ControlPanel.h"
+#include "ui_Actuators.h"
 #include <QTimer>
 
 namespace riptide_rviz
 {
-    class ControlPanel : public rviz_common::Panel
+    class Actuators : public rviz_common::Panel
     {
-        Q_OBJECT public : ControlPanel(QWidget *parent = 0);
-        ~ControlPanel();
+        Q_OBJECT public : Actuators(QWidget *parent = 0);
+        ~Actuators();
 
         void load(const rviz_common::Config &config) override;
         void save(rviz_common::Config config) const override;
@@ -31,7 +31,7 @@ namespace riptide_rviz
 
     private:
         // UI Panel instance
-        Ui_ControlPanel *uiPanel;
+        Ui_Actuators *uiPanel;
 
         rclcpp::Node::SharedPtr clientNode;
         QTimer * spinTimer;

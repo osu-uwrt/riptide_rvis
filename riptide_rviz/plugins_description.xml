@@ -9,4 +9,14 @@
             RVIZ plugin for controlling riptide autonomy while underwater
         </description>
     </class>
+    <class name="riptide_rviz/Bringup" type="riptide_rviz::Bringup" base_class_type="rviz_common::Panel">
+        <description>
+            RVIZ plugin for starting up the riptide software package on remote targets
+        </description>
+    </class>
+    <class name="riptide_rviz/Actuators" type="riptide_rviz::Actuators" base_class_type="rviz_common::Panel">
+        <description>
+            RVIZ plugin for controlling the actuators on a riptide vehicle
+        </description>
+    </class>
 </library>

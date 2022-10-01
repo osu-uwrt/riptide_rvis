@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>417</width>
-    <height>535</height>
+    <width>334</width>
+    <height>332</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,80 +18,11 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>311</width>
-     <height>523</height>
+     <width>321</width>
+     <height>311</height>
     </rect>
    </property>
    <layout class="QVBoxLayout" name="layout">
-    <item>
-     <widget class="QWidget" name="bringup" native="true">
-      <layout class="QFormLayout" name="formLayout">
-       <item row="1" column="1">
-        <widget class="QComboBox" name="bringupFile">
-         <property name="toolTip">
-          <string>Bringup file to run</string>
-         </property>
-         <item>
-          <property name="text">
-           <string>Bringup File</string>
-          </property>
-         </item>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="QComboBox" name="bringupHost">
-         <property name="toolTip">
-          <string>Bringup Host Computer</string>
-         </property>
-         <item>
-          <property name="text">
-           <string>Bringup Host Computer</string>
-          </property>
-         </item>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QPushButton" name="bringupStop">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">QPushButton {color: white; background:red;}
-
-QPushButton:!enabled{color:white; background: rgb(140, 100, 100)}</string>
-         </property>
-         <property name="text">
-          <string>Stop</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="0">
-        <widget class="QPushButton" name="bringupStart">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">QPushButton {color: white; background: green;}
-QPushButton:!enabled{color: white; background: rgb(100, 130, 110);}</string>
-         </property>
-         <property name="text">
-          <string>Start</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0">
-        <widget class="QPushButton" name="bringupRefresh">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
-         <property name="text">
-          <string>Refresh</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-    </item>
     <item>
      <layout class="QGridLayout" name="control">
       <item row="1" column="0">
@@ -394,136 +325,6 @@ QPushButton:!enabled{color:white; background: rgb(140, 100, 100)}</string>
          </widget>
         </item>
        </layout>
-      </item>
-     </layout>
-    </item>
-    <item>
-     <layout class="QGridLayout" name="actuators">
-      <item row="3" column="2">
-       <widget class="QPushButton" name="actDrop2">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">QPushButton {color: white; background:red;}
-
-QPushButton:!enabled{color:white; background: rgb(140, 100, 100)}</string>
-        </property>
-        <property name="text">
-         <string>Drop Marker 2</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="2">
-       <widget class="QLabel" name="label_5">
-        <property name="text">
-         <string>Dropper</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignBottom|Qt::AlignHCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="1">
-       <widget class="QPushButton" name="actTorp2">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">QPushButton {color: white; background:red;}
-
-QPushButton:!enabled{color:white; background: rgb(140, 100, 100)}</string>
-        </property>
-        <property name="text">
-         <string>Fire Tube 2</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QPushButton" name="actTorpArm">
-        <property name="styleSheet">
-         <string notr="true">QPushButton {color: white; background: green;}
-QPushButton:!enabled{color: white; background: rgb(100, 130, 110);}</string>
-        </property>
-        <property name="text">
-         <string>Arm</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="0">
-       <widget class="QLabel" name="label_3">
-        <property name="text">
-         <string>Claw:</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignBottom|Qt::AlignHCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="2">
-       <widget class="QPushButton" name="actDrop1">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">QPushButton {color: white; background:red;}
-
-QPushButton:!enabled{color:white; background: rgb(140, 100, 100)}</string>
-        </property>
-        <property name="text">
-         <string>Drop Marker 1</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1">
-       <widget class="QPushButton" name="actTorp1">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">QPushButton {color: white; background:red;}
-
-QPushButton:!enabled{color:white; background: rgb(140, 100, 100)}</string>
-        </property>
-        <property name="text">
-         <string>Fire Tube 1</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0">
-       <widget class="QPushButton" name="actClawClose">
-        <property name="text">
-         <string>Close</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="2">
-       <widget class="QPushButton" name="actDropArm">
-        <property name="styleSheet">
-         <string notr="true">QPushButton {color: white; background: green;}
-QPushButton:!enabled{color: white; background: rgb(100, 130, 110);}</string>
-        </property>
-        <property name="text">
-         <string>Arm</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QPushButton" name="actClawOpen">
-        <property name="text">
-         <string>Open</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="QLabel" name="label_4">
-        <property name="text">
-         <string>Torpedos:</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignBottom|Qt::AlignHCenter</set>
-        </property>
-       </widget>
       </item>
      </layout>
     </item>
