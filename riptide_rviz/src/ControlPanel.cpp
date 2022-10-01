@@ -285,6 +285,68 @@ namespace riptide_rviz
 
     void ControlPanel::handleCommand()
     {
+        // first take the current readout and hold it
+        // only need xy and yaw, we discard roll and pitch and z
+        double x, y, z, roll, pitch, yaw;
+        bool convOk[6];
+
+        // make sure that the conversion goes okay as well
+        x = uiPanel->cmdReqX->text().toDouble(&convOk[0]);
+        y = uiPanel->cmdReqY->text().toDouble(&convOk[1]);
+        z = uiPanel->cmdReqZ->text().toDouble(&convOk[2]);
+        roll = uiPanel->cmdReqR->text().toDouble(&convOk[3]);
+        pitch = uiPanel->cmdReqP->text().toDouble(&convOk[4]);
+        yaw = uiPanel->cmdReqYaw->text().toDouble(&convOk[5]);
+
+        if (std::any_of(std::begin(convOk), std::end(convOk), [](bool i)
+                        { return !i; }))
+        {
+            std::cerr << "Failed to convert requested position to floating point" << std::endl;
+            // set the red stylesheet
+            uiPanel->CtrlSendCmd->setStyleSheet("QPushButton{color:black; background: red;}");
+
+            // create a timer to clear it in 1 second
+            QTimer::singleShot(1000, [this](void)
+                               { uiPanel->CtrlSendCmd->setStyleSheet(""); });
+            return;
+        }
+
+        // now we can build the command and send it
+        // build the linear control message
+        auto linear = geometry_msgs::msg::Vector3();
+        linear.x = x;
+        linear.y = y;
+        linear.z = z;
+        auto linCmd = riptide_msgs2::msg::ControllerCommand();
+        linCmd.setpoint_vect = linear;
+        linCmd.mode = ctrlMode;
+
+        // if we are in position, we use quat, otherwise use the vector
+        auto angCmd = riptide_msgs2::msg::ControllerCommand();
+        if (ctrlMode == riptide_msgs2::msg::ControllerCommand::POSITION)
+        {
+            // convert RPY to quaternion
+            tf2::Quaternion quat;
+            quat.setRPY(0, 0, yaw);
+
+            // build the angular quat message
+            auto angular = tf2::toMsg(quat);
+            angCmd.setpoint_quat = angular;
+        } else {
+            // build the vector
+            auto angular = geometry_msgs::msg::Vector3();
+            linear.x = roll;
+            linear.y = pitch;
+            linear.z = yaw;
+            angCmd.setpoint_vect = angular;
+        }
+
+        // add the current control mode
+        angCmd.mode = ctrlMode;
+
+        // send the control messages
+        ctrlCmdLinPub->publish(linCmd);
+        ctrlCmdAngPub->publish(angCmd);
     }
 
     void ControlPanel::odomCallback(const nav_msgs::msg::Odometry &msg)
@@ -317,7 +379,8 @@ namespace riptide_rviz
         uiPanel->cmdCurrZ->setText(QString::number(msg.pose.pose.position.z, 'f', 2));
     }
 
-    void ControlPanel::steadyCallback(const std_msgs::msg::Bool & msg){
+    void ControlPanel::steadyCallback(const std_msgs::msg::Bool &msg)
+    {
         uiPanel->cmdSteady->setEnabled(msg.data);
     }
 
