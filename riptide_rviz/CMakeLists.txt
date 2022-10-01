@@ -14,6 +14,7 @@ find_package(launch_msgs REQUIRED)
 find_package(ament_index_cpp REQUIRED)
 find_package(riptide_msgs2 REQUIRED)
 find_package(tf2 REQUIRED)
+find_package(tf2_geometry_msgs REQUIRED)
 
 # rviz specific deps
 find_package(rviz_common REQUIRED)
@@ -72,6 +73,7 @@ ament_target_dependencies(${PROJECT_NAME}
   ament_index_cpp
   riptide_msgs2
   tf2
+  tf2_geometry_msgs
 )
 
 # Link non ament packages

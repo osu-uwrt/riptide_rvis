@@ -14,7 +14,8 @@
 #include "ui_ControlPanel.h"
 #include <QTimer>
 
-
+#define ODOM_TIMEOUT 25s
+#define MAX_IN_PLACE_DEPTH 0.5 // distance in M
 
 namespace riptide_rviz
 {
@@ -45,6 +46,7 @@ namespace riptide_rviz
 
         // slots for controlling the UI
         void toggleDegrees();
+        void refreshUI();
 
         // slots for sending commands to the vehicle
         void handleLocalDive();
@@ -58,8 +60,11 @@ namespace riptide_rviz
         // UI Panel instance
         Ui_ControlPanel *uiPanel;
 
-        // message for sending commands to the controller
-        riptide_msgs2::msg::ControllerCommand::SharedPtr controllerCommand;
+        // mode for sending commands to the controller
+        uint8_t ctrlMode;
+
+        // last time we have recieved odom
+        builtin_interfaces::msg::Time odomTime;
 
         // internal flags 
         bool vehicleEnabled = false;
@@ -69,8 +74,11 @@ namespace riptide_rviz
         rclcpp::Node::SharedPtr clientNode;
         QTimer * spinTimer;
 
+        // QT ui timer for handling data freshness
+        QTimer * uiTimer;
+
         // publishers
-        rclcpp::Publisher<riptide_msgs2::msg::ControllerCommand>::SharedPtr ctrlCmdPub;
+        rclcpp::Publisher<riptide_msgs2::msg::ControllerCommand>::SharedPtr ctrlCmdLinPub, ctrlCmdAngPub;
         rclcpp::Publisher<riptide_msgs2::msg::KillSwitchReport>::SharedPtr killStatePub;
 
         // ROS Timers
