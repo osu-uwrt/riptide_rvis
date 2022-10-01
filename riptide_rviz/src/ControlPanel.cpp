@@ -170,7 +170,7 @@ namespace riptide_rviz
         {
             // the odom has timed out
             if (uiPanel->CtrlSendCmd->isEnabled())
-                std::cerr << "Odom timed out. disabling local control buttons" << std::endl;
+                std::cerr << "Odom timed out or vehicle disabled! disabling local control buttons" << std::endl;
 
             uiPanel->ctrlDiveInPlace->setEnabled(false);
             uiPanel->CtrlSendCmd->setEnabled(false);
