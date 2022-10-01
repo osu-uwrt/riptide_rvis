@@ -16,9 +16,8 @@ namespace riptide_rviz
         uiPanel = new Ui_Bringup();
         uiPanel->setupUi(this);
 
-        auto options = rclcpp::NodeOptions().arguments(
-            {"--ros-args --remap __node:=riptide_control_panel"});
-        clientNode = std::make_shared<rclcpp::Node>("_", options);
+        auto options = rclcpp::NodeOptions().arguments({});
+        clientNode = std::make_shared<rclcpp::Node>("riptide_rviz_bringup", options);
     }
 
     void Bringup::onInitialize()
