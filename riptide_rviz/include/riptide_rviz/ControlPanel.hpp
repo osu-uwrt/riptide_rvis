@@ -5,6 +5,7 @@
 #include <riptide_msgs2/msg/controller_command.hpp>
 #include <riptide_msgs2/msg/kill_switch_report.hpp>
 #include <nav_msgs/msg/odometry.hpp>
+#include <std_msgs/msg/bool.hpp>
 
 #include <ament_index_cpp/get_package_share_directory.hpp>
 #include <ament_index_cpp/get_package_prefix.hpp>
@@ -31,11 +32,11 @@ namespace riptide_rviz
         void onInitialize() override;
 
         // ROS Subscriber callbacks
-        void odomCallback(const nav_msgs::msg::Odometry & msg);
+        void odomCallback(const nav_msgs::msg::Odometry &msg);
+        void steadyCallback(const std_msgs::msg::Bool & msg);
 
         // ROS timer callbacks
         void sendKillMsgTimer();
-
 
     protected Q_SLOTS:
         // QT slots (function callbacks)
@@ -66,16 +67,16 @@ namespace riptide_rviz
         // last time we have recieved odom
         builtin_interfaces::msg::Time odomTime;
 
-        // internal flags 
+        // internal flags
         bool vehicleEnabled = false;
         bool degreeReadout = true;
 
         // core stuff for creating and managing a ROS node
         rclcpp::Node::SharedPtr clientNode;
-        QTimer * spinTimer;
+        QTimer *spinTimer;
 
         // QT ui timer for handling data freshness
-        QTimer * uiTimer;
+        QTimer *uiTimer;
 
         // publishers
         rclcpp::Publisher<riptide_msgs2::msg::ControllerCommand>::SharedPtr ctrlCmdLinPub, ctrlCmdAngPub;
@@ -86,7 +87,7 @@ namespace riptide_rviz
 
         // ROS Subscribers
         rclcpp::Subscription<nav_msgs::msg::Odometry>::SharedPtr odomSub;
-
+        rclcpp::Subscription<std_msgs::msg::Bool>::SharedPtr steadySub;
     };
 
 } // namespace riptide_rviz

@@ -53,6 +53,9 @@ namespace riptide_rviz
         odomSub = clientNode->create_subscription<nav_msgs::msg::Odometry>(
             ROBOT_NS + std::string("/odom"), rclcpp::SystemDefaultsQoS(),
             std::bind(&ControlPanel::odomCallback, this, _1));
+        steadySub = clientNode->create_subscription<std_msgs::msg::Bool>(
+            ROBOT_NS + std::string("/controller/steady"), rclcpp::SystemDefaultsQoS(),
+            std::bind(&ControlPanel::steadyCallback, this, _1));
 
         // Connect UI signals for controlling the riptide vehicle
         connect(uiPanel->ctrlEnable, &QPushButton::clicked, [this](void)
@@ -72,8 +75,9 @@ namespace riptide_rviz
         connect(uiPanel->ctrlModeFFD, &QPushButton::clicked,
                 [this](void)
                 { switchMode(riptide_msgs2::msg::ControllerCommand::FEEDFORWARD); });
-        // connect(uiPanel->ctrlModeVel, &QPushButton::clicked,
-        //     [this](void){ switchMode(riptide_msgs2::msg::ControllerCommand::VELOCITY); });
+        connect(uiPanel->ctrlModeVel, &QPushButton::clicked,
+                [this](void)
+                { switchMode(22); });
 
         // command sending buttons
         connect(uiPanel->ctrlDiveInPlace, &QPushButton::clicked, [this](void)
@@ -137,6 +141,37 @@ namespace riptide_rviz
 
     void ControlPanel::switchMode(uint8_t mode)
     {
+        // make sure the vehicle is enabled before allowing a selection
+        if (!vehicleEnabled)
+            return;
+
+        ctrlMode = mode;
+        switch (ctrlMode)
+        {
+        case riptide_msgs2::msg::ControllerCommand::POSITION:
+            uiPanel->ctrlModeFFD->setEnabled(true);
+            uiPanel->ctrlModeVel->setEnabled(true);
+            uiPanel->ctrlModePos->setEnabled(false);
+            uiPanel->ctrlModeTele->setEnabled(true);
+
+            break;
+        case riptide_msgs2::msg::ControllerCommand::VELOCITY:
+            uiPanel->ctrlModeFFD->setEnabled(true);
+            uiPanel->ctrlModeVel->setEnabled(false);
+            uiPanel->ctrlModePos->setEnabled(true);
+            uiPanel->ctrlModeTele->setEnabled(true);
+
+            break;
+        case riptide_msgs2::msg::ControllerCommand::FEEDFORWARD:
+            uiPanel->ctrlModeFFD->setEnabled(false);
+            uiPanel->ctrlModeVel->setEnabled(true);
+            uiPanel->ctrlModePos->setEnabled(true);
+            uiPanel->ctrlModeTele->setEnabled(true);
+            break;
+        default:
+            std::cerr << "Button not yet operable" << std::endl;
+            break;
+        }
     }
 
     void ControlPanel::refreshUI()
@@ -280,6 +315,10 @@ namespace riptide_rviz
         uiPanel->cmdCurrX->setText(QString::number(msg.pose.pose.position.x, 'f', 2));
         uiPanel->cmdCurrY->setText(QString::number(msg.pose.pose.position.y, 'f', 2));
         uiPanel->cmdCurrZ->setText(QString::number(msg.pose.pose.position.z, 'f', 2));
+    }
+
+    void ControlPanel::steadyCallback(const std_msgs::msg::Bool & msg){
+        uiPanel->cmdSteady->setEnabled(msg.data);
     }
 
     // ROS timer callbacks

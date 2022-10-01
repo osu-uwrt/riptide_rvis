@@ -169,6 +169,10 @@ QPushButton:!enabled{color:white; background: rgb(140, 100, 100)}</string>
         <property name="enabled">
          <bool>false</bool>
         </property>
+        <property name="styleSheet">
+         <string notr="true">QLabel {color: green;}
+QLabel:!enabled{color: red;}</string>
+        </property>
         <property name="text">
          <string>Steady</string>
         </property>
@@ -247,7 +251,7 @@ QPushButton:!enabled{color:white; background: rgb(140, 100, 100)}</string>
         <item row="0" column="4">
          <widget class="QLabel" name="label_18">
           <property name="text">
-           <string>P</string>
+           <string>Pitch</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
@@ -332,7 +336,7 @@ QPushButton:!enabled{color:white; background: rgb(140, 100, 100)}</string>
         <item row="0" column="5">
          <widget class="QLabel" name="label_19">
           <property name="text">
-           <string>Y</string>
+           <string>Yaw</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
@@ -355,7 +359,7 @@ QPushButton:!enabled{color:white; background: rgb(140, 100, 100)}</string>
         <item row="0" column="3">
          <widget class="QLabel" name="label_17">
           <property name="text">
-           <string>R</string>
+           <string>Roll</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
