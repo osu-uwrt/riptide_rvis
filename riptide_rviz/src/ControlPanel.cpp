@@ -129,22 +129,10 @@ namespace riptide_rviz
 
         // clear the controller command mode
         ctrlMode = riptide_msgs2::msg::ControllerCommand::DISABLED;
-
-        // enable all of the mode control buttons the user has to click
-        // one to actually start the controller again
-
-        uiPanel->ctrlModeFFD->setEnabled(true);
-        uiPanel->ctrlModeVel->setEnabled(true);
-        uiPanel->ctrlModePos->setEnabled(true);
-        uiPanel->ctrlModeTele->setEnabled(true);
     }
 
     void ControlPanel::switchMode(uint8_t mode)
     {
-        // make sure the vehicle is enabled before allowing a selection
-        if (!vehicleEnabled)
-            return;
-
         ctrlMode = mode;
         switch (ctrlMode)
         {
