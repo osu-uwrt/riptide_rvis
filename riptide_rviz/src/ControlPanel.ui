@@ -2,12 +2,15 @@
 <ui version="4.0">
  <class>ControlPanel</class>
  <widget class="QWidget" name="ControlPanel">
+  <property name="enabled">
+   <bool>true</bool>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>334</width>
-    <height>332</height>
+    <width>384</width>
+    <height>343</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,8 +21,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>321</width>
-     <height>311</height>
+     <width>371</width>
+     <height>331</height>
     </rect>
    </property>
    <layout class="QVBoxLayout" name="layout">
@@ -40,7 +43,7 @@
         <item>
          <widget class="QPushButton" name="ctrlModePos">
           <property name="enabled">
-           <bool>false</bool>
+           <bool>true</bool>
           </property>
           <property name="styleSheet">
            <string notr="true">QPushButton:!enabled{background-color: #A3C1DA; font-weight: bold; color: black; border-color: black;}</string>
@@ -143,6 +146,71 @@ QPushButton:!enabled{color:white; background: rgb(140, 100, 100)}</string>
      </layout>
     </item>
     <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_3">
+      <item>
+       <widget class="QCheckBox" name="ctrlRequireKill">
+        <property name="text">
+         <string>Req Kill</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QLabel" name="cmdSteady">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QLabel {color: green;}
+QLabel:!enabled{color: red;}</string>
+        </property>
+        <property name="text">
+         <string>Steady</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer_2">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_3">
+        <property name="text">
+         <string>Angles:</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="ctrlDegOrRad">
+        <property name="text">
+         <string>Degrees</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
      <layout class="QVBoxLayout" name="command">
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout">
@@ -193,7 +261,7 @@ QPushButton:!enabled{color:white; background: rgb(140, 100, 100)}</string>
         <item row="0" column="4">
          <widget class="QLabel" name="label_18">
           <property name="text">
-           <string>P</string>
+           <string>Pitch</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
@@ -205,12 +273,24 @@ QPushButton:!enabled{color:white; background: rgb(140, 100, 100)}</string>
           <property name="enabled">
            <bool>false</bool>
           </property>
+          <property name="styleSheet">
+           <string notr="true">QLineEdit:!enabled{color: black;};</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
          </widget>
         </item>
         <item row="1" column="5">
          <widget class="QLineEdit" name="cmdCurrYaw">
           <property name="enabled">
            <bool>false</bool>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">QLineEdit:!enabled{color: black;};</string>
+          </property>
+          <property name="text">
+           <string/>
           </property>
          </widget>
         </item>
@@ -219,6 +299,12 @@ QPushButton:!enabled{color:white; background: rgb(140, 100, 100)}</string>
           <property name="enabled">
            <bool>false</bool>
           </property>
+          <property name="styleSheet">
+           <string notr="true">QLineEdit:!enabled{color: black;};</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
          </widget>
         </item>
         <item row="1" column="3">
@@ -226,12 +312,24 @@ QPushButton:!enabled{color:white; background: rgb(140, 100, 100)}</string>
           <property name="enabled">
            <bool>false</bool>
           </property>
+          <property name="styleSheet">
+           <string notr="true">QLineEdit:!enabled{color: black;};</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
          </widget>
         </item>
         <item row="1" column="1">
          <widget class="QLineEdit" name="cmdCurrY">
           <property name="enabled">
            <bool>false</bool>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">QLineEdit:!enabled{color: black;};</string>
+          </property>
+          <property name="text">
+           <string/>
           </property>
          </widget>
         </item>
@@ -248,7 +346,7 @@ QPushButton:!enabled{color:white; background: rgb(140, 100, 100)}</string>
         <item row="0" column="5">
          <widget class="QLabel" name="label_19">
           <property name="text">
-           <string>Y</string>
+           <string>Yaw</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
@@ -260,12 +358,18 @@ QPushButton:!enabled{color:white; background: rgb(140, 100, 100)}</string>
           <property name="enabled">
            <bool>false</bool>
           </property>
+          <property name="styleSheet">
+           <string notr="true">QLineEdit:!enabled{color: black;};</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
          </widget>
         </item>
         <item row="0" column="3">
          <widget class="QLabel" name="label_17">
           <property name="text">
-           <string>R</string>
+           <string>Roll</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
@@ -295,7 +399,7 @@ QPushButton:!enabled{color:white; background: rgb(140, 100, 100)}</string>
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_2">
         <item>
-         <widget class="QPushButton" name="pushButton_2">
+         <widget class="QPushButton" name="ctrlDiveInPlace">
           <property name="enabled">
            <bool>false</bool>
           </property>
@@ -305,9 +409,9 @@ QPushButton:!enabled{color:white; background: rgb(140, 100, 100)}</string>
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="pushButton_4">
+         <widget class="QPushButton" name="ctrlFwdCurrent">
           <property name="enabled">
-           <bool>false</bool>
+           <bool>true</bool>
           </property>
           <property name="text">
            <string>Current</string>
@@ -315,9 +419,12 @@ QPushButton:!enabled{color:white; background: rgb(140, 100, 100)}</string>
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="pushButton_3">
+         <widget class="QPushButton" name="CtrlSendCmd">
           <property name="enabled">
            <bool>false</bool>
+          </property>
+          <property name="styleSheet">
+           <string notr="true"/>
           </property>
           <property name="text">
            <string>Command</string>

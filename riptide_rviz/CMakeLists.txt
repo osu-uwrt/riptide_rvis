@@ -9,9 +9,13 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rclcpp_action REQUIRED)
-find_package(std_srvs REQUIRED)
+find_package(nav_msgs REQUIRED)
 find_package(launch_msgs REQUIRED)
 find_package(ament_index_cpp REQUIRED)
+find_package(riptide_msgs2 REQUIRED)
+find_package(tf2 REQUIRED)
+find_package(tf2_geometry_msgs REQUIRED)
+find_package(std_msgs REQUIRED)
 
 # rviz specific deps
 find_package(rviz_common REQUIRED)
@@ -65,9 +69,13 @@ ament_target_dependencies(${PROJECT_NAME}
   rclcpp 
   rclcpp_action
   rviz_common  
-  std_srvs
+  nav_msgs
   launch_msgs
   ament_index_cpp
+  riptide_msgs2
+  tf2
+  tf2_geometry_msgs
+  std_msgs
 )
 
 # Link non ament packages
