@@ -1,6 +1,6 @@
 #include <rclcpp/rclcpp.hpp>
 #include <rclcpp_action/rclcpp_action.hpp>
-#include <riptide_msgs/srv/list_trees.hpp>
+#include <riptide_msgs2/srv/list_trees.hpp>
 
 #include <ament_index_cpp/get_package_share_directory.hpp>
 #include <ament_index_cpp/get_package_prefix.hpp>
@@ -17,9 +17,9 @@ namespace riptide_rviz
         Q_OBJECT public : MissionPanel(QWidget *parent = 0);
         ~MissionPanel();
 
-        virtual void load(const rviz_common::Config &config);
-        virtual void save(rviz_common::Config config) const;
-        
+        void load(const rviz_common::Config &config) override;
+        void save(rviz_common::Config config) const override;
+        void onInitialize() override; 
     protected Q_SLOTS:
         //QT slots (function callbacks)
         void refresh();
@@ -31,7 +31,7 @@ namespace riptide_rviz
         Ui_MissionPanel *uiPanel;
         rclcpp::Node::SharedPtr clientNode;
         QTimer * spinTimer;
-        rclcpp::Client<riptide_msgs::srv::listTrees>::SharedPtr refreshClient;
+        rclcpp::Client<riptide_msgs2::srv::ListTrees>::SharedPtr refreshClient;
         // void discover_ns();
     };
 

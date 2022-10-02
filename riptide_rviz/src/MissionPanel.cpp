@@ -1,4 +1,6 @@
 #include "riptide_rviz/MissionPanel.hpp"
+#include <chrono>
+using namespace std::chrono_literals;
 
 namespace riptide_rviz
 {
@@ -58,15 +60,16 @@ namespace riptide_rviz
 
     void MissionPanel::refresh()
     {
-        refreshClient = clientNode->create_client<riptide_msgs::srv::ListTrees>("/tempest/autonomy/list_trees");
+        refreshClient = clientNode->create_client<riptide_msgs2::srv::ListTrees>("/tempest/autonomy/list_trees");
         
-        riptide_msgs::srv::ListTrees::Request::SharedPtr startReq = std::make_shared<riptide_msgs::srv::ListTrees::Request>();
-
+        riptide_msgs2::srv::ListTrees::Request::SharedPtr startReq = std::make_shared<riptide_msgs2::srv::ListTrees::Request>();
+        auto start = clientNode->get_clock()->now();
         while (!refreshClient->wait_for_service(100ms))
-                if (!rclcpp::ok())
+                if (clientNode->get_clock()->now() - start > 1s || !rclcpp::ok())
+                    
                     return;
         
-        auto refreshFuture = refreshClient->async_send_request();
+        auto refreshFuture = refreshClient->async_send_request(startReq);
         if (rclcpp::spin_until_future_complete(clientNode, refreshFuture) == rclcpp::FutureReturnCode::SUCCESS)
         {
 
