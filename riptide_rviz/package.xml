@@ -12,6 +12,19 @@
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>
 
+  <build_depend>riptide_msgs2</build_depend>
+  <build_depend>rclcpp</build_depend>
+  <build_depend>rclcpp_action</build_depend>
+  <build_depend>nav_msgs</build_depend>
+  <build_depend>launch_msgs</build_depend>
+  <build_depend>ament_index_cpp</build_depend>
+  <build_depend>tf2</build_depend>
+  <build_depend>tf2_geometry_msgs</build_depend>
+  <build_depend>std_msgs</build_depend>
+
+  <build_depend>rviz_common</build_depend>
+  <build_depend>rviz_ogre_vendor</build_depend>
+
   <export>
     <build_type>ament_cmake</build_type>
   </export>
