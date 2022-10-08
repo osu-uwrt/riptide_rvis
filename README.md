@@ -46,7 +46,7 @@ It uses the ros2 package ros2_launch_system in order to control bringing up and 
 ## Mission Panel
 <img width="348" alt="image" src="https://user-images.githubusercontent.com/5054270/194717198-68556710-ce69-4975-9961-7b2b006d2ca9.png">
 
-The Missiin panel controls the autonomy action server. It is capable of selecting, starting and stopping the action server in riptide_autonomy. 
+The Mission panel controls the autonomy action server. It is capable of selecting, starting and stopping the action server in riptide_autonomy. 
 
 The upper portion of the panel is used to control the action server. If autonomy has not been started before the rviz plugin, the user can press refresh to get the current list of trees. Once the list is populated, the default option will become none selected. When the selection is a valid tree, the user can then press start to begin running the tree. When started, the start button will become disabled, and the stop button will illuminate. When / if the user wishes to stop the tree, they can press stop. 
 
