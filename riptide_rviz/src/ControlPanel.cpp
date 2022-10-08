@@ -210,6 +210,13 @@ namespace riptide_rviz
                         { return !i; }))
         {
             std::cerr << "Failed to convert current position to floating point" << std::endl;
+            
+            // set the red stylesheet
+            uiPanel->ctrlDiveInPlace->setStyleSheet("QPushButton{color:black; background: red;}");
+
+            // create a timer to clear it in 1 second
+            QTimer::singleShot(1000, [this](void)
+                               { uiPanel->ctrlDiveInPlace->setStyleSheet(""); });
             return;
         }
 
