@@ -24,6 +24,15 @@ The control panel focuses on commanding the vehicle in the water. It has the fol
 
 
 ## Actuator Panel
+<img width="389" alt="image" src="https://user-images.githubusercontent.com/5054270/194715620-13e3a139-847a-4013-b8fe-c76e54ed8806.png">
+
+The Actuator panel focuses on the control of actuation systems on the vehicle. It has control over the claw, dropper and torpedo systems currently.
+
+
+For the claw system, the buttons can be used to command an open or a closed state.
+
+
+For the dropper and torpedo systems that store energy, the syetems must be armed first. When the operator wishes to actuate them, they should press the arm button first. The button will become yellow during the arming process. At any time after pressing, the user can press the arm button again to disarm the system. Once the system is fully armed, the fire or drop buttons will become enabled and active. Pressing the button will trigger the actuation, then safely disarm the system. The armed button will again return to green when the system has been disarmed succesfully.
 
 
 ## Bringup Panel
