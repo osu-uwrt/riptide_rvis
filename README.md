@@ -36,6 +36,8 @@ For the dropper and torpedo systems that store energy, the syetems must be armed
 
 
 ## Bringup Panel
+<img width="389" alt="image" src="https://user-images.githubusercontent.com/5054270/194715864-f34cca7c-6532-4a1e-adea-9c51650e9862.png">
 
+The Bringup panel is focused around starting and stopinng code execution on a remote system. It uses the ros2 package ros2_launch_system in order to control bringing up and down a launch file configuration from a specific package. In order to start, make sure the launch service is installed on the target computer, and enabled. If the computer list remains empty, click refresh to trigger a re-scan for the service. Once detected select the target computer in the list. Then select the file you wish to launch. When ready click the start button to launch the file on the remote computer. Once the request is sent, the stop button will illuminate, and the start button will disable. If the launch crashes, or the user presses stop, the launch will be shut down and the start button re-illuminated. 
 
 ## Mission Panel
