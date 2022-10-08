@@ -20,6 +20,11 @@ namespace riptide_rviz
         treeList = std::vector<std::string>();
 
         actionServer = rclcpp_action::create_client<ExecuteTree>(clientNode, "/tempest/autonomy/run_tree");
+    
+        stackSub = clientNode->create_subscription<riptide_msgs2::msg::TreeStack>(
+            "/tempest/autonomy/tree_stack", rclcpp::SystemDefaultsQoS(),
+            std::bind(&MissionPanel::stackCb, this, _1)
+        );
     }
 
     void MissionPanel::onInitialize()
@@ -29,6 +34,10 @@ namespace riptide_rviz
         connect(spinTimer, &QTimer::timeout, [this](void)
                 { rclcpp::spin_some(clientNode); });
         spinTimer->start(50);
+
+        // create the item model and attach it to the panel
+        model = new QStandardItemModel();
+        uiPanel->btStackView->setModel(model);
 
         // uiTimer = new QTimer(this);
         // connect(uiTimer, &QTimer::timeout, [this](void)
@@ -67,10 +76,17 @@ namespace riptide_rviz
         // master window control removal
         delete uiPanel;
         delete spinTimer;
+        delete model;
     }
 
     void MissionPanel::refresh()
     {
+        // reset the GUI in case of tree crash
+        if(!uiPanel->btStart->isEnabled()){
+            uiPanel->btStart->setEnabled(true);
+            uiPanel->btStop->setEnabled(false);
+        }
+
         refreshClient = clientNode->create_client<riptide_msgs2::srv::ListTrees>("/tempest/autonomy/list_trees");
 
         riptide_msgs2::srv::ListTrees::Request::SharedPtr startReq = std::make_shared<riptide_msgs2::srv::ListTrees::Request>();
@@ -180,6 +196,24 @@ namespace riptide_rviz
 
     void MissionPanel::cancelAccept(const action_msgs::srv::CancelGoal::Response::SharedPtr resp){
         // anything we want to do when the cancels are accepted
+    }
+
+    void MissionPanel::stackCb(const riptide_msgs2::msg::TreeStack & msg ){
+        
+        // clean the tree
+        model->clear();
+
+        // get the root again
+        QStandardItem* parentItem = model->invisibleRootItem();
+
+        // add the new tree
+        for(auto name : msg.stack){
+            QStandardItem * item = new QStandardItem(QString::fromStdString(name));
+            parentItem->appendRow(item);
+            parentItem = item;
+        }
+
+        uiPanel->btStackView->expandAll();
     }
 
     void MissionPanel::cancelTask()
