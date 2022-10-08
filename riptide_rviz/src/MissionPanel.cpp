@@ -124,6 +124,8 @@ namespace riptide_rviz
         if(found){
             // enable the start button
             uiPanel->btStart->setEnabled(true);
+        } else {
+            uiPanel->btStart->setEnabled(false);
         }
     }
 
