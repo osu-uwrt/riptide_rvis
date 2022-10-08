@@ -38,6 +38,16 @@ For the dropper and torpedo systems that store energy, the syetems must be armed
 ## Bringup Panel
 <img width="389" alt="image" src="https://user-images.githubusercontent.com/5054270/194715864-f34cca7c-6532-4a1e-adea-9c51650e9862.png">
 
-The Bringup panel is focused around starting and stopinng code execution on a remote system. It uses the ros2 package ros2_launch_system in order to control bringing up and down a launch file configuration from a specific package. In order to start, make sure the launch service is installed on the target computer, and enabled. If the computer list remains empty, click refresh to trigger a re-scan for the service. Once detected select the target computer in the list. Then select the file you wish to launch. When ready click the start button to launch the file on the remote computer. Once the request is sent, the stop button will illuminate, and the start button will disable. If the launch crashes, or the user presses stop, the launch will be shut down and the start button re-illuminated. 
+The Bringup panel is focused around starting and stopinng code execution on a remote system. 
+
+
+It uses the ros2 package ros2_launch_system in order to control bringing up and down a launch file configuration from a specific package. In order to start, make sure the launch service is installed on the target computer, and enabled. If the computer list remains empty, click refresh to trigger a re-scan for the service. Once detected select the target computer in the list. Then select the file you wish to launch. When ready click the start button to launch the file on the remote computer. Once the request is sent, the stop button will illuminate, and the start button will disable. If the launch crashes, or the user presses stop, the launch will be shut down and the start button re-illuminated. 
 
 ## Mission Panel
+<img width="348" alt="image" src="https://user-images.githubusercontent.com/5054270/194717198-68556710-ce69-4975-9961-7b2b006d2ca9.png">
+
+The Missiin panel controls the autonomy action server. It is capable of selecting, starting and stopping the action server in riptide_autonomy. 
+
+The upper portion of the panel is used to control the action server. If autonomy has not been started before the rviz plugin, the user can press refresh to get the current list of trees. Once the list is populated, the default option will become none selected. When the selection is a valid tree, the user can then press start to begin running the tree. When started, the start button will become disabled, and the stop button will illuminate. When / if the user wishes to stop the tree, they can press stop. 
+
+While a tree is running, a special topic becomes active with the execution stack. this stack is rendered in the tree view panel below. It will always contain the last stack recieved by the autonomy server. Should an error cause the exectuion to abort. The tree view will turn red for one second to indicate a tree failure and subsequent abort.
