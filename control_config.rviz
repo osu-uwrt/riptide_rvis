@@ -6,10 +6,13 @@ Panels:
       Expanded:
         - /Global Options1
         - /Status1
-        - /Image1
-        - /Image1/Topic1
+        - /RobotModel1
+        - /TF1
+        - /TF1/Frames1
+        - /Odometry1
+        - /Odometry1/Shape1
       Splitter Ratio: 0.5
-    Tree Height: 363
+    Tree Height: 555
   - Class: rviz_common/Selection
     Name: Selection
   - Class: rviz_common/Tool Properties
@@ -28,6 +31,8 @@ Panels:
     Name: Time
     SyncMode: 0
     SyncSource: ""
+  - Class: rviz_common/Transformation
+    Name: Transformation
   - Class: riptide_rviz/MissionPanel
     Name: MissionPanel
   - Class: riptide_rviz/ControlPanel
@@ -36,13 +41,6 @@ Panels:
     Name: Bringup
   - Class: riptide_rviz/Actuators
     Name: Actuators
-  - Class: rviz_common/Displays
-    Help Height: 70
-    Name: Displays
-    Property Tree Widget:
-      Expanded: ~
-      Splitter Ratio: 0.5
-    Tree Height: 349
 Visualization Manager:
   Class: ""
   Displays:
@@ -64,24 +62,241 @@ Visualization Manager:
       Plane Cell Count: 10
       Reference Frame: <Fixed Frame>
       Value: true
-    - Class: rviz_default_plugins/Image
-      Enabled: false
-      Max Value: 1
-      Median window: 5
-      Min Value: 0
-      Name: Image
-      Normalize Range: true
-      Topic:
+    - Alpha: 0.6000000238418579
+      Class: rviz_default_plugins/RobotModel
+      Collision Enabled: false
+      Description File: ""
+      Description Source: Topic
+      Description Topic:
         Depth: 5
         Durability Policy: Volatile
         History Policy: Keep Last
         Reliability Policy: Reliable
-        Value: ""
-      Value: false
+        Value: tempest/robot_description
+      Enabled: true
+      Links:
+        All Links Enabled: true
+        Expand Joint Details: false
+        Expand Link Details: false
+        Expand Tree: false
+        Link Tree Style: Links in Alphabetic Order
+      Mass Properties:
+        Inertia: false
+        Mass: false
+      Name: RobotModel
+      TF Prefix: ""
+      Update Interval: 0
+      Value: true
+      Visual Enabled: true
+    - Class: rviz_default_plugins/TF
+      Enabled: true
+      Frame Timeout: 15
+      Frames:
+        All Enabled: false
+      Marker Scale: 1
+      Name: TF
+      Show Arrows: true
+      Show Axes: true
+      Show Names: false
+      Tree:
+        {}
+      Update Interval: 0
+      Value: true
+    - Angle Tolerance: 0.10000000149011612
+      Class: rviz_default_plugins/Odometry
+      Covariance:
+        Orientation:
+          Alpha: 0.5
+          Color: 255; 255; 127
+          Color Style: Unique
+          Frame: Local
+          Offset: 1
+          Scale: 1
+          Value: true
+        Position:
+          Alpha: 0.30000001192092896
+          Color: 204; 51; 204
+          Scale: 1
+          Value: true
+        Value: true
+      Enabled: true
+      Keep: 1
+      Name: Odometry
+      Position Tolerance: 0.10000000149011612
+      Shape:
+        Alpha: 0
+        Axes Length: 1
+        Axes Radius: 0.10000000149011612
+        Color: 255; 25; 0
+        Head Length: 0.30000001192092896
+        Head Radius: 0.10000000149011612
+        Shaft Length: 1
+        Shaft Radius: 0.05000000074505806
+        Value: Arrow
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        Filter size: 10
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /tempest/odometry/filtered
+      Value: true
+    - Accept NaN Values: false
+      Alpha: 1
+      Arrow Width: 0.05000000074505806
+      Class: rviz_default_plugins/Wrench
+      Enabled: true
+      Force Arrow Scale: 0.05000000074505806
+      Force Color: 204; 51; 51
+      History Length: 1
+      Name: Wrench
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        Filter size: 10
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /tempest/thruster_wrenches/thruster_0
+      Torque Arrow Scale: 2
+      Torque Color: 204; 204; 51
+      Value: true
+    - Accept NaN Values: false
+      Alpha: 1
+      Arrow Width: 0.05000000074505806
+      Class: rviz_default_plugins/Wrench
+      Enabled: true
+      Force Arrow Scale: 0.05000000074505806
+      Force Color: 204; 51; 51
+      History Length: 1
+      Name: Wrench
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        Filter size: 10
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /tempest/thruster_wrenches/thruster_1
+      Torque Arrow Scale: 2
+      Torque Color: 204; 204; 51
+      Value: true
+    - Accept NaN Values: false
+      Alpha: 1
+      Arrow Width: 0.05000000074505806
+      Class: rviz_default_plugins/Wrench
+      Enabled: true
+      Force Arrow Scale: 0.05000000074505806
+      Force Color: 204; 51; 51
+      History Length: 1
+      Name: Wrench
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        Filter size: 10
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /tempest/thruster_wrenches/thruster_2
+      Torque Arrow Scale: 2
+      Torque Color: 204; 204; 51
+      Value: true
+    - Accept NaN Values: false
+      Alpha: 1
+      Arrow Width: 0.05000000074505806
+      Class: rviz_default_plugins/Wrench
+      Enabled: true
+      Force Arrow Scale: 0.05000000074505806
+      Force Color: 204; 51; 51
+      History Length: 1
+      Name: Wrench
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        Filter size: 10
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /tempest/thruster_wrenches/thruster_3
+      Torque Arrow Scale: 2
+      Torque Color: 204; 204; 51
+      Value: true
+    - Accept NaN Values: false
+      Alpha: 1
+      Arrow Width: 0.05000000074505806
+      Class: rviz_default_plugins/Wrench
+      Enabled: true
+      Force Arrow Scale: 0.05000000074505806
+      Force Color: 204; 51; 51
+      History Length: 1
+      Name: Wrench
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        Filter size: 10
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /tempest/thruster_wrenches/thruster_4
+      Torque Arrow Scale: 2
+      Torque Color: 204; 204; 51
+      Value: true
+    - Accept NaN Values: false
+      Alpha: 1
+      Arrow Width: 0.05000000074505806
+      Class: rviz_default_plugins/Wrench
+      Enabled: true
+      Force Arrow Scale: 0.05000000074505806
+      Force Color: 204; 51; 51
+      History Length: 1
+      Name: Wrench
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        Filter size: 10
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /tempest/thruster_wrenches/thruster_5
+      Torque Arrow Scale: 2
+      Torque Color: 204; 204; 51
+      Value: true
+    - Accept NaN Values: false
+      Alpha: 1
+      Arrow Width: 0.05000000074505806
+      Class: rviz_default_plugins/Wrench
+      Enabled: true
+      Force Arrow Scale: 0.05000000074505806
+      Force Color: 204; 51; 51
+      History Length: 1
+      Name: Wrench
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        Filter size: 10
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /tempest/thruster_wrenches/thruster_6
+      Torque Arrow Scale: 2
+      Torque Color: 204; 204; 51
+      Value: true
+    - Accept NaN Values: false
+      Alpha: 1
+      Arrow Width: 0.05000000074505806
+      Class: rviz_default_plugins/Wrench
+      Enabled: true
+      Force Arrow Scale: 0.05000000074505806
+      Force Color: 204; 51; 51
+      History Length: 1
+      Name: Wrench
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        Filter size: 10
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /tempest/thruster_wrenches/thruster_7
+      Torque Arrow Scale: 2
+      Torque Color: 204; 204; 51
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
-    Fixed Frame: map
+    Fixed Frame: world
     Frame Rate: 30
   Name: root
   Tools:
@@ -124,7 +339,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/Orbit
-      Distance: 10
+      Distance: 8.268494606018066
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -139,10 +354,10 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.40039852261543274
-      Target Frame: <Fixed Frame>
-      Value: Orbit (rviz_default_plugins)
-      Yaw: 1.0403980016708374
+      Pitch: 0.4197961390018463
+      Target Frame: tempest/base_link
+      Value: Orbit (rviz)
+      Yaw: 1.7485783100128174
     Saved: ~
 Window Geometry:
   Actuators:
@@ -156,16 +371,16 @@ Window Geometry:
   Height: 881
   Hide Left Dock: false
   Hide Right Dock: false
-  Image:
-    collapsed: false
   MissionPanel:
     collapsed: false
-  QMainWindow State: 000000ff00000000fd000000040000000000000183000002fffc020000000bfb0000001200530065006c0065006300740069006f006e00000001e10000009b0000005c00fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000180043006f006e00740072006f006c00500061006e0065006c01000000160000016a0000001600fffffffb00000012004100630074007500610074006f007200730100000186000001080000001500fffffffb000000100044006900730070006c006100790073000000009200000163000000c900fffffffb0000000e004200720069006e0067007500700100000294000000810000001600fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c000002610000000100000156000002fffc0200000004fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fc00000016000002ff000000e60100001cfa000000020100000003fb000000100044006900730070006c0061007900730100000000ffffffff0000015600fffffffb0000000a0056006900650077007301000003a10000010f0000010000fffffffb00000018004d0069007300730069006f006e00500061006e0065006c0100000000ffffffff0000008e00fffffffb0000000a0049006d006100670065000000025f000000b60000002800fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e10000019700000003000005e800000039fc0100000002fb0000000800540069006d00650100000000000005e8000002fb00fffffffb0000000800540069006d0065010000000000000450000000000000000000000303000002ff00000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730000000000ffffffff0000000000000000
+  QMainWindow State: 000000ff00000000fd000000040000000000000182000002d3fc020000000bfb0000001200530065006c0065006300740069006f006e00000001e10000009b0000005c00fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261fb0000001c005400720061006e00730066006f0072006d006100740069006f006e000000031f000000c10000007b00fffffffb000000180043006f006e00740072006f006c00500061006e0065006c010000003d000001a90000001600fffffffb00000012004100630074007500610074006f0072007301000001ec0000009e0000001500fffffffb0000000e004200720069006e0067007500700100000290000000800000001600ffffff0000000100000156000002d3fc0200000003fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fc0000003d000002d3000000e60100001cfa000000000100000003fb00000018004d0069007300730069006f006e00500061006e0065006c0100000000ffffffff0000008e00fffffffb000000100044006900730070006c0061007900730100000000ffffffff0000015600fffffffb0000000a0056006900650077007301000006710000010f0000010000fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e10000019700000003000005e80000003efc0100000002fb0000000800540069006d00650100000000000005e8000002fb00fffffffb0000000800540069006d0065010000000000000450000000000000000000000304000002d300000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   Selection:
     collapsed: false
   Time:
     collapsed: false
   Tool Properties:
+    collapsed: false
+  Transformation:
     collapsed: false
   Views:
     collapsed: false

@@ -51,7 +51,7 @@ namespace riptide_rviz
 
         // make ROS Subscribers
         odomSub = clientNode->create_subscription<nav_msgs::msg::Odometry>(
-            ROBOT_NS + std::string("/odom"), rclcpp::SystemDefaultsQoS(),
+            ROBOT_NS + std::string("/odometry/filtered"), rclcpp::SystemDefaultsQoS(),
             std::bind(&ControlPanel::odomCallback, this, _1));
         steadySub = clientNode->create_subscription<std_msgs::msg::Bool>(
             ROBOT_NS + std::string("/controller/steady"), rclcpp::SystemDefaultsQoS(),
@@ -265,9 +265,9 @@ namespace riptide_rviz
         x = uiPanel->cmdCurrX->text();
         y = uiPanel->cmdCurrY->text();
         z = uiPanel->cmdCurrZ->text();
-        roll = uiPanel->cmdCurrX->text();
-        pitch = uiPanel->cmdCurrX->text();
-        yaw = uiPanel->cmdCurrX->text();
+        roll = uiPanel->cmdCurrR->text();
+        pitch = uiPanel->cmdCurrP->text();
+        yaw = uiPanel->cmdCurrYaw->text();
 
         // take the values and propagate them into the requested values
         uiPanel->cmdReqX->setText(x);
