@@ -2,6 +2,11 @@
 #include <rclcpp/rclcpp.hpp>
 #include <rclcpp_action/rclcpp_action.hpp>
 
+#include <riptide_msgs2/action/arm_torpedo_dropper.hpp>
+#include <riptide_msgs2/action/change_claw_state.hpp>
+#include <riptide_msgs2/action/actuate_torpedos.hpp>
+#include <riptide_msgs2/action/actuate_dropper.hpp>
+
 #include <ament_index_cpp/get_package_share_directory.hpp>
 #include <ament_index_cpp/get_package_prefix.hpp>
 #include <rviz_common/panel.hpp>
@@ -12,6 +17,15 @@
 
 namespace riptide_rviz
 {
+    using ArmTorpedoDropper = riptide_msgs2::action::ArmTorpedoDropper;
+    using GHArmTorpedoDropper = rclcpp_action::ClientGoalHandle<ArmTorpedoDropper>;
+    using ChangeClawState = riptide_msgs2::action::ChangeClawState;
+    using GHChangeClawState = rclcpp_action::ClientGoalHandle<ChangeClawState>;
+    using ActuateTorpedos = riptide_msgs2::action::ActuateTorpedos;
+    using GHActuateTorpedos = rclcpp_action::ClientGoalHandle<ActuateTorpedos>;
+    using ActuateDropper = riptide_msgs2::action::ActuateDropper;
+    using GHActuateDropper = rclcpp_action::ClientGoalHandle<ActuateDropper>;
+
     class Actuators : public rviz_common::Panel
     {
         Q_OBJECT public : Actuators(QWidget *parent = 0);
@@ -28,6 +42,31 @@ namespace riptide_rviz
 
     protected:
         bool event(QEvent *event);
+        
+        //For ArmTorpedoDropper
+        void taskStartCbATD(const GHArmTorpedoDropper::SharedPtr & goalHandle);
+        void cancelAcceptATD(const action_msgs::srv::CancelGoal::Response::SharedPtr );
+        void taskCompleteCbATD(const GHArmTorpedoDropper::WrappedResult & result);
+        void taskFeedbackCbATD(GHArmTorpedoDropper::SharedPtr goalHandle,
+                            ArmTorpedoDropper::Feedback::ConstSharedPtr feedback);
+        //For ChangeClawState
+        void taskStartCbCCS(const GHChangeClawState::SharedPtr & goalHandle);
+        void cancelAcceptCCS(const action_msgs::srv::CancelGoal::Response::SharedPtr );
+        void taskCompleteCbCCS(const GHChangeClawState::WrappedResult & result);
+        void taskFeedbackCbCCS(GHChangeClawState::SharedPtr goalHandle,
+                            ChangeClawState::Feedback::ConstSharedPtr feedback);
+        //For ActuateTorpedos
+        void taskStartCbAT(const GHActuateTorpedos::SharedPtr & goalHandle);
+        void cancelAcceptAT(const action_msgs::srv::CancelGoal::Response::SharedPtr );
+        void taskCompleteCbAT(const GHActuateTorpedos::WrappedResult & result);
+        void taskFeedbackCbAT(GHActuateTorpedos::SharedPtr goalHandle,
+                            ActuateTorpedos::Feedback::ConstSharedPtr feedback);
+        //For ActuateDropper
+        void taskStartCbAD(const GHActuateDropper::SharedPtr & goalHandle);
+        void cancelAcceptAD(const action_msgs::srv::CancelGoal::Response::SharedPtr );
+        void taskCompleteCbAD(const GHActuateDropper::WrappedResult & result);
+        void taskFeedbackCbAD(GHActuateDropper::SharedPtr goalHandle,
+                            ActuateDropper::Feedback::ConstSharedPtr feedback);
 
     private:
         // UI Panel instance

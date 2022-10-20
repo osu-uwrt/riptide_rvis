@@ -15,6 +15,11 @@ namespace riptide_rviz
 
         auto options = rclcpp::NodeOptions().arguments({});
         clientNode = std::make_shared<rclcpp::Node>("riptide_rviz_actuators", options);
+        
+        armTorpedos = rclcpp::create_client<ArmTorpedoDropper>(clientNode, "/tempest/autonomy/run_tree");
+        changeClawState = rclcpp::create_client<ChangeClawState>(clientNode, "/tempest/autonomy/run_tree");
+        actuateTorpedos = rclcpp::create_client<ActuateTorpedos>(clientNode, "/tempest/autonomy/run_tree");
+        actuateDropper = rclcpp::create_client<ActuateDropper>(clientNode, "/tempest/autonomy/run_tree");
     }
 
     void Actuators::onInitialize()
