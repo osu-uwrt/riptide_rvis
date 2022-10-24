@@ -221,14 +221,17 @@ namespace riptide_rviz
         }
 
         // build the linear control message
-        // auto override the control mode to position
-        auto linear = geometry_msgs::msg::Vector3();
-        linear.x = x;
-        linear.y = y;
-        linear.z = 0.75; // automatically go to 0.75m below surface
+        // auto override the control mode to position 
         auto linCmd = riptide_msgs2::msg::ControllerCommand();
-        linCmd.setpoint_vect = linear;
+        linCmd.setpoint_vect.x = x;
+        linCmd.setpoint_vect.y = y;
+        linCmd.setpoint_vect.z = -0.75; // automatically go to 0.75m below surface
         linCmd.mode = riptide_msgs2::msg::ControllerCommand::POSITION;
+
+        // check the angle mode button
+        if(degreeReadout){
+            yaw *= M_PI / 180.0; 
+        }
 
         // convert RPY to quaternion
         tf2::Quaternion quat;
@@ -308,36 +311,37 @@ namespace riptide_rviz
 
         // now we can build the command and send it
         // build the linear control message
-        auto linear = geometry_msgs::msg::Vector3();
-        linear.x = x;
-        linear.y = y;
-        linear.z = z;
         auto linCmd = riptide_msgs2::msg::ControllerCommand();
-        linCmd.setpoint_vect = linear;
+        linCmd.setpoint_vect.x = x;
+        linCmd.setpoint_vect.y = y;
+        linCmd.setpoint_vect.z = z;
         linCmd.mode = ctrlMode;
 
         // if we are in position, we use quat, otherwise use the vector
         auto angCmd = riptide_msgs2::msg::ControllerCommand();
+        angCmd.mode = ctrlMode;
+
         if (ctrlMode == riptide_msgs2::msg::ControllerCommand::POSITION)
         {
+            // check the angle mode button
+            if(degreeReadout){
+                roll *= M_PI / 180.0; 
+                pitch *= M_PI / 180.0; 
+                yaw *= M_PI / 180.0; 
+            }
+
             // convert RPY to quaternion
             tf2::Quaternion quat;
-            quat.setRPY(0, 0, yaw);
+            quat.setRPY(roll, pitch, yaw);
 
-            // build the angular quat message
-            auto angular = tf2::toMsg(quat);
-            angCmd.setpoint_quat = angular;
+            // build the angular quat for message
+            angCmd.setpoint_quat = tf2::toMsg(quat);
         } else {
             // build the vector
-            auto angular = geometry_msgs::msg::Vector3();
-            linear.x = roll;
-            linear.y = pitch;
-            linear.z = yaw;
-            angCmd.setpoint_vect = angular;
+            angCmd.setpoint_vect.x = roll;
+            angCmd.setpoint_vect.y = pitch;
+            angCmd.setpoint_vect.z = yaw;
         }
-
-        // add the current control mode
-        angCmd.mode = ctrlMode;
 
         // send the control messages
         ctrlCmdLinPub->publish(linCmd);
