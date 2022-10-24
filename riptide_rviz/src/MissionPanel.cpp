@@ -96,7 +96,7 @@ namespace riptide_rviz
                 return;
 
         auto refreshFuture = refreshClient->async_send_request(startReq);
-        if (rclcpp::spin_until_future_complete(clientNode, refreshFuture) == rclcpp::FutureReturnCode::SUCCESS)
+        if (rclcpp::spin_until_future_complete(clientNode, refreshFuture, 1s) == rclcpp::FutureReturnCode::SUCCESS)
         {
 
             auto response = refreshFuture.get();

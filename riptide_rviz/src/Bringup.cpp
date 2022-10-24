@@ -153,7 +153,7 @@ namespace riptide_rviz
 
             // make the request and wait for the future to be valid
             auto bringupFuture = bringupStartClient->async_send_request(startReq);
-            if (rclcpp::spin_until_future_complete(clientNode, bringupFuture) == rclcpp::FutureReturnCode::SUCCESS)
+            if (rclcpp::spin_until_future_complete(clientNode, bringupFuture, 1s) == rclcpp::FutureReturnCode::SUCCESS)
             {
 
                 auto result = bringupFuture.get();
@@ -184,12 +184,13 @@ namespace riptide_rviz
         launch_msgs::srv::ListLaunch::Request::SharedPtr listReq = std::make_shared<launch_msgs::srv::ListLaunch::Request>();
         listReq->status = launch_msgs::msg::LaunchID::UNKNOWN;
 
+        auto start = clientNode->get_clock()->now();
         while (!bringupListClient->wait_for_service(100ms))
-            if (!rclcpp::ok())
+            if (!rclcpp::ok() || clientNode->get_clock()->now() - start > 1s)
                 return;
 
         auto future = bringupListClient->async_send_request(listReq);
-        if (rclcpp::spin_until_future_complete(clientNode, future) == rclcpp::FutureReturnCode::SUCCESS)
+        if (rclcpp::spin_until_future_complete(clientNode, future, 1s) == rclcpp::FutureReturnCode::SUCCESS)
         {
             // find the launch ID we want
             auto launches = future.get()->launches;
@@ -218,7 +219,7 @@ namespace riptide_rviz
                 return;
 
         auto future = bringupStopClient->async_send_request(stopReq);
-        if (rclcpp::spin_until_future_complete(clientNode, future) == rclcpp::FutureReturnCode::SUCCESS)
+        if (rclcpp::spin_until_future_complete(clientNode, future, 1s) == rclcpp::FutureReturnCode::SUCCESS)
         {
             if (future.get()->stopped)
             {
