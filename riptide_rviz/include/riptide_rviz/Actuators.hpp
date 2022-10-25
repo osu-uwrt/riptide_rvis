@@ -5,7 +5,7 @@
 #include <riptide_msgs2/action/arm_torpedo_dropper.hpp>
 #include <riptide_msgs2/action/change_claw_state.hpp>
 #include <riptide_msgs2/action/actuate_torpedos.hpp>
-#include <riptide_msgs2/action/actuate_dropper.hpp>
+#include <riptide_msgs2/action/actuate_droppers.hpp>
 
 #include <ament_index_cpp/get_package_share_directory.hpp>
 #include <ament_index_cpp/get_package_prefix.hpp>
@@ -23,8 +23,8 @@ namespace riptide_rviz
     using GHChangeClawState = rclcpp_action::ClientGoalHandle<ChangeClawState>;
     using ActuateTorpedos = riptide_msgs2::action::ActuateTorpedos;
     using GHActuateTorpedos = rclcpp_action::ClientGoalHandle<ActuateTorpedos>;
-    using ActuateDropper = riptide_msgs2::action::ActuateDropper;
-    using GHActuateDropper = rclcpp_action::ClientGoalHandle<ActuateDropper>;
+    using ActuateDroppers = riptide_msgs2::action::ActuateDroppers;
+    using GHActuateDropper = rclcpp_action::ClientGoalHandle<ActuateDroppers>;
 
     class Actuators : public rviz_common::Panel
     {
@@ -66,7 +66,7 @@ namespace riptide_rviz
         void cancelAcceptAD(const action_msgs::srv::CancelGoal::Response::SharedPtr );
         void taskCompleteCbAD(const GHActuateDropper::WrappedResult & result);
         void taskFeedbackCbAD(GHActuateDropper::SharedPtr goalHandle,
-                            ActuateDropper::Feedback::ConstSharedPtr feedback);
+                            ActuateDroppers::Feedback::ConstSharedPtr feedback);
 
     private:
         // UI Panel instance
