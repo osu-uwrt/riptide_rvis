@@ -14,6 +14,7 @@ find_package(launch_msgs REQUIRED)
 find_package(ament_index_cpp REQUIRED)
 find_package(riptide_msgs2 REQUIRED)
 find_package(tf2 REQUIRED)
+find_package(geometry_msgs REQUIRED)
 find_package(tf2_geometry_msgs REQUIRED)
 find_package(std_msgs REQUIRED)
 
@@ -68,14 +69,17 @@ pluginlib_export_plugin_description_file(rviz_common plugins_description.xml)
 ament_target_dependencies(${PROJECT_NAME} 
   rclcpp 
   rclcpp_action
+
   rviz_common  
+  ament_index_cpp
+  tf2
+
+  riptide_msgs2
+  tf2_geometry_msgs
+  geometry_msgs
+  std_msgs
   nav_msgs
   launch_msgs
-  ament_index_cpp
-  riptide_msgs2
-  tf2
-  tf2_geometry_msgs
-  std_msgs
 )
 
 # Link non ament packages

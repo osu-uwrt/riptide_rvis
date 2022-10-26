@@ -4,6 +4,7 @@
 
 #include <riptide_msgs2/msg/controller_command.hpp>
 #include <riptide_msgs2/msg/kill_switch_report.hpp>
+#include <geometry_msgs/msg/pose_stamped.hpp>
 #include <nav_msgs/msg/odometry.hpp>
 #include <std_msgs/msg/bool.hpp>
 
@@ -34,6 +35,7 @@ namespace riptide_rviz
         // ROS Subscriber callbacks
         void odomCallback(const nav_msgs::msg::Odometry &msg);
         void steadyCallback(const std_msgs::msg::Bool & msg);
+        void selectedPose(const geometry_msgs::msg::PoseStamped & msg);
 
         // ROS timer callbacks
         void sendKillMsgTimer();
@@ -88,6 +90,7 @@ namespace riptide_rviz
         // ROS Subscribers
         rclcpp::Subscription<nav_msgs::msg::Odometry>::SharedPtr odomSub;
         rclcpp::Subscription<std_msgs::msg::Bool>::SharedPtr steadySub;
+        rclcpp::Subscription<geometry_msgs::msg::PoseStamped>::SharedPtr selectPoseSub;
     };
 
 } // namespace riptide_rviz

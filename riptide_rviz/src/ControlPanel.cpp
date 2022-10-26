@@ -56,6 +56,9 @@ namespace riptide_rviz
         steadySub = clientNode->create_subscription<std_msgs::msg::Bool>(
             ROBOT_NS + std::string("/controller/steady"), rclcpp::SystemDefaultsQoS(),
             std::bind(&ControlPanel::steadyCallback, this, _1));
+        selectPoseSub = clientNode->create_subscription<geometry_msgs::msg::PoseStamped>(
+            "goal_pose", rclcpp::SystemDefaultsQoS(),
+            std::bind(&ControlPanel::selectedPose, this, _1));
 
         // Connect UI signals for controlling the riptide vehicle
         connect(uiPanel->ctrlEnable, &QPushButton::clicked, [this](void)
@@ -376,6 +379,35 @@ namespace riptide_rviz
         uiPanel->cmdCurrX->setText(QString::number(msg.pose.pose.position.x, 'f', 2));
         uiPanel->cmdCurrY->setText(QString::number(msg.pose.pose.position.y, 'f', 2));
         uiPanel->cmdCurrZ->setText(QString::number(msg.pose.pose.position.z, 'f', 2));
+    }
+
+    void ControlPanel::selectedPose(const geometry_msgs::msg::PoseStamped & msg){
+        // use z depth from odom
+        auto z = uiPanel->cmdCurrZ->text();
+        // update the values set by the selected pose
+        // take the values and propagate them into the requested values
+        uiPanel->cmdReqZ->setText(z);
+        uiPanel->cmdReqX->setText(QString::number(msg.pose.position.x, 'f', 2));
+        uiPanel->cmdReqY->setText(QString::number(msg.pose.position.y, 'f', 2));
+
+        // convert yaw only quat to rpy and populate
+        tf2::Quaternion q(msg.pose.orientation.x, msg.pose.orientation.y,
+                          msg.pose.orientation.z, msg.pose.orientation.w);
+        tf2::Matrix3x3 m(q);
+        double roll, pitch, yaw;
+        m.getRPY(roll, pitch, yaw);
+
+        // convert to degrees if its what we're showing
+        if (degreeReadout)
+        {
+            roll *= 180.0 / M_PI;
+            pitch *= 180.0 / M_PI;
+            yaw *= 180.0 / M_PI;
+        }
+
+        uiPanel->cmdReqR->setText(QString::number(roll, 'f', 2));
+        uiPanel->cmdReqP->setText(QString::number(pitch, 'f', 2));
+        uiPanel->cmdReqYaw->setText(QString::number(yaw, 'f', 2));
     }
 
     void ControlPanel::steadyCallback(const std_msgs::msg::Bool &msg)
