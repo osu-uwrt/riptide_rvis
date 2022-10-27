@@ -382,32 +382,35 @@ namespace riptide_rviz
     }
 
     void ControlPanel::selectedPose(const geometry_msgs::msg::PoseStamped & msg){
-        // use z depth from odom
-        auto z = uiPanel->cmdCurrZ->text();
-        // update the values set by the selected pose
-        // take the values and propagate them into the requested values
-        uiPanel->cmdReqZ->setText(z);
-        uiPanel->cmdReqX->setText(QString::number(msg.pose.position.x, 'f', 2));
-        uiPanel->cmdReqY->setText(QString::number(msg.pose.position.y, 'f', 2));
+        // check position control mode !!!
+        if (ctrlMode == riptide_msgs2::msg::ControllerCommand::POSITION){
+            // use z depth from odom
+            auto z = uiPanel->cmdCurrZ->text();
+            // update the values set by the selected pose
+            // take the values and propagate them into the requested values
+            uiPanel->cmdReqZ->setText(z);
+            uiPanel->cmdReqX->setText(QString::number(msg.pose.position.x, 'f', 2));
+            uiPanel->cmdReqY->setText(QString::number(msg.pose.position.y, 'f', 2));
 
-        // convert yaw only quat to rpy and populate
-        tf2::Quaternion q(msg.pose.orientation.x, msg.pose.orientation.y,
-                          msg.pose.orientation.z, msg.pose.orientation.w);
-        tf2::Matrix3x3 m(q);
-        double roll, pitch, yaw;
-        m.getRPY(roll, pitch, yaw);
+            // convert yaw only quat to rpy and populate
+            tf2::Quaternion q(msg.pose.orientation.x, msg.pose.orientation.y,
+                            msg.pose.orientation.z, msg.pose.orientation.w);
+            tf2::Matrix3x3 m(q);
+            double roll, pitch, yaw;
+            m.getRPY(roll, pitch, yaw);
 
-        // convert to degrees if its what we're showing
-        if (degreeReadout)
-        {
-            roll *= 180.0 / M_PI;
-            pitch *= 180.0 / M_PI;
-            yaw *= 180.0 / M_PI;
+            // convert to degrees if its what we're showing
+            if (degreeReadout)
+            {
+                roll *= 180.0 / M_PI;
+                pitch *= 180.0 / M_PI;
+                yaw *= 180.0 / M_PI;
+            }
+
+            uiPanel->cmdReqR->setText(QString::number(roll, 'f', 2));
+            uiPanel->cmdReqP->setText(QString::number(pitch, 'f', 2));
+            uiPanel->cmdReqYaw->setText(QString::number(yaw, 'f', 2));
         }
-
-        uiPanel->cmdReqR->setText(QString::number(roll, 'f', 2));
-        uiPanel->cmdReqP->setText(QString::number(pitch, 'f', 2));
-        uiPanel->cmdReqYaw->setText(QString::number(yaw, 'f', 2));
     }
 
     void ControlPanel::steadyCallback(const std_msgs::msg::Bool &msg)
