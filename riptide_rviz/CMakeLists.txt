@@ -5,21 +5,24 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
 
-# find dependencies
+# find general dependencies
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rclcpp_action REQUIRED)
+find_package(ament_index_cpp REQUIRED)
+find_package(tf2 REQUIRED)
+
+# find message deps
 find_package(nav_msgs REQUIRED)
 find_package(launch_msgs REQUIRED)
-find_package(ament_index_cpp REQUIRED)
 find_package(riptide_msgs2 REQUIRED)
-find_package(tf2 REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(tf2_geometry_msgs REQUIRED)
 find_package(std_msgs REQUIRED)
 
 # rviz specific deps
 find_package(rviz_common REQUIRED)
+find_package(rviz_rendering REQUIRED)
 find_package(rviz_ogre_vendor REQUIRED)
 find_package(Qt5 COMPONENTS Widgets Core REQUIRED)
 find_package(pluginlib REQUIRED)
@@ -69,10 +72,11 @@ pluginlib_export_plugin_description_file(rviz_common plugins_description.xml)
 ament_target_dependencies(${PROJECT_NAME} 
   rclcpp 
   rclcpp_action
-
-  rviz_common  
   ament_index_cpp
   tf2
+
+  rviz_common 
+  rviz_rendering 
 
   riptide_msgs2
   tf2_geometry_msgs
