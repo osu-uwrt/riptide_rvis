@@ -57,6 +57,14 @@ namespace riptide_rviz {
         OverlayTextDisplay();
         virtual ~OverlayTextDisplay();
 
+        virtual void onInitialize() override;
+        virtual void onEnable() override;
+        virtual void onDisable() override;
+        virtual void update(float wall_dt, float ros_dt) override;
+        virtual void reset() override;
+
+        void setText(const FrameProperties & prop, bool show);
+
       protected:
         OverlayObject::SharedPtr overlay_;
 
@@ -76,14 +84,6 @@ namespace riptide_rviz {
         int vertical_dist_;
         HorizontalAlignment horizontal_alignment_;
         VerticalAlignment vertical_alignment_;
-
-        virtual void onInitialize() override;
-        virtual void onEnable() override;
-        virtual void onDisable() override;
-        virtual void update(float wall_dt, float ros_dt) override;
-        virtual void reset() override;
-
-        void setText(const FrameProperties & prop, bool show);
 
         bool require_update_texture_;
         // properties are raw pointers since they are owned by Qt

@@ -27,6 +27,7 @@ find_package(rviz_ogre_vendor REQUIRED)
 find_package(Qt5 COMPONENTS Widgets Core REQUIRED)
 find_package(pluginlib REQUIRED)
 find_package(resource_retriever REQUIRED)
+find_package(diagnostic_msgs REQUIRED)
 
 # Qt5 boilerplate options from http://doc.qt.io/qt-5/cmake-manual.html
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -84,6 +85,7 @@ ament_target_dependencies(${PROJECT_NAME}
   std_msgs
   nav_msgs
   launch_msgs
+  diagnostic_msgs
 )
 
 # Link non ament packages

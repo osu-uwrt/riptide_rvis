@@ -94,8 +94,8 @@ namespace riptide_rviz {
 
         QFontDatabase database;
         font_families_ = database.families();
-        font_property_ =
-                new rviz_common::properties::EnumProperty("font", "DejaVu Sans Mono", "font", this, SLOT(updateFont()));
+        font_property_ = new rviz_common::properties::EnumProperty("font", 
+                "DejaVu Sans Mono", "font", this, SLOT(updateFont()));
         for (ssize_t i = 0; i < font_families_.size(); i++) {
             font_property_->addOption(font_families_[i], (int) i);
         }
@@ -136,7 +136,7 @@ namespace riptide_rviz {
         require_update_texture_ = true;
 
         FrameProperties props = {
-            "18.75 V",
+            "",
             300,
             100,
 
@@ -144,16 +144,13 @@ namespace riptide_rviz {
             0,
             0,
 
-            HorizontalAlignment::LEFT,
-            VerticalAlignment::TOP,
-
             QColor(0, 0, 0, 0),
             QColor(255, 255, 255, 255),
 
             300
         };
 
-        setText(props, true);
+        setText(props, false);
     }
 
     void OverlayTextDisplay::update(float /*wall_dt*/, float /*ros_dt*/) {
@@ -258,9 +255,6 @@ namespace riptide_rviz {
         text_size_ = prop.text_size_;
         horizontal_dist_ = prop.horizontal_dist_;
         vertical_dist_ = prop.vertical_dist_;
-
-        horizontal_alignment_ = prop.horizontal_alignment_;
-        vertical_alignment_ = prop.vertical_alignment_;
         
         bg_color_ = prop.bg_color_;
         fg_color_ = prop.fg_color_;

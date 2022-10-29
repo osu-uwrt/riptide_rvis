@@ -97,9 +97,6 @@ namespace riptide_rviz {
         int horizontal_dist_;
         int vertical_dist_;
 
-        HorizontalAlignment horizontal_alignment_;
-        VerticalAlignment vertical_alignment_;
-
         QColor bg_color_, fg_color_;
 
         int line_width_;
