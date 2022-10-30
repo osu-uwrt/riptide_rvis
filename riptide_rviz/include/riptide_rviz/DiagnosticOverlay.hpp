@@ -9,6 +9,7 @@
 namespace riptide_rviz
 {
     class DiagnosticOverlay : public OverlayDisplay {
+        Q_OBJECT
         public:
         DiagnosticOverlay();
 
@@ -24,6 +25,8 @@ namespace riptide_rviz
 
         void diagnosticCallback(const diagnostic_msgs::msg::DiagnosticArray & msg);
 
+        protected Q_SLOTS:
+        void updateFont();
 
         private:
         // internal node
@@ -32,8 +35,16 @@ namespace riptide_rviz
         // subscription for diagnostics
         rclcpp::Subscription<diagnostic_msgs::msg::DiagnosticArray>::SharedPtr diagSub;
 
+        // ids for rendering items so that we can edit them
         int voltageTextId = -1;
         int ledConfigId = -1;
+
+        // font configuration info
+        QStringList fontFamilies;
+        std::string fontName;
+
+        // Addtional RVIZ settings
+        rviz_common::properties::EnumProperty *fontProperty;
 
     };
 } // namespace riptide_rviz

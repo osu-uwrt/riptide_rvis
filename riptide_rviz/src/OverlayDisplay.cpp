@@ -160,7 +160,11 @@ namespace riptide_rviz {
             
             painter.end();
         }
+
+        // update render parameters for rviz
         overlay_->setDimensions(overlay_->getTextureWidth(), overlay_->getTextureHeight());
+        overlay_->setPosition(horizontal_dist_, vertical_dist_, horizontal_alignment_, vertical_alignment_);
+
         require_update_texture_ = false;
     }
 
