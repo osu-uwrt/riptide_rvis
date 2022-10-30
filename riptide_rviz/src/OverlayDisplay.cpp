@@ -237,7 +237,7 @@ namespace riptide_rviz {
         painter.drawEllipse(QPoint(config.x_, config.y_), config.outer_radius_, config.outer_radius_);
 
         // draw the inner circle now
-        QBrush brush(config.inner_color_, style);
+        brush.setColor(config.inner_color_);
         painter.setBrush(brush);
         painter.drawEllipse(QPoint(config.x_, config.y_), config.inner_radius_, config.inner_radius_);
     }
