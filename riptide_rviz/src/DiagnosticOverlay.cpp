@@ -22,7 +22,7 @@ namespace riptide_rviz
         );
 
         PaintedTextConfig initText = {
-            0, 0, 0, 0, "00.00 V",
+            12, 0, 0, 0, "00.00 V",
             "", false, 2, 12,
             QColor(255, 0, 255, 255)
         };
@@ -33,8 +33,8 @@ namespace riptide_rviz
 
         PaintedCircleConfig ledConfig = {
             40, 60, 0, 0, 25, 30,
-            QColor(0, 255, 255, 200),
-            QColor(0, 0, 0, 200)
+            QColor(255, 0, 255, 255),
+            QColor(0, 0, 0, 255)
         };
 
         ledConfigId = addCircle(ledConfig);
@@ -47,7 +47,7 @@ namespace riptide_rviz
             if(diagnostic.name == "/Robot Diagnostics/Electronics/Voltages and Currents/V+ Rail Voltage"){
                 // set text to ??? and color to red
                 PaintedTextConfig initText = {
-                    0, 0, 0, 0, "00.00 V",
+                    12, 0, 0, 0, "00.00 V",
                     "", false, 2, 12,
                     QColor(255, 0, 0, 255)
                 };
@@ -71,9 +71,18 @@ namespace riptide_rviz
 
                 // edit the text
             }
+
+            // handle general packet
+            else if(diagnostic.name == "/Robot Diagnostics"){
+                PaintedCircleConfig ledConfig = {
+                    40, 60, 0, 0, 25, 30,
+                    QColor(255, 0, 0, 255),
+                    QColor(0, 0, 0, 255)
+                };
+
+                updateCircle(ledConfigId, ledConfig);
+            }
         }
-
-
     }
     
     void DiagnosticOverlay::onEnable(){
