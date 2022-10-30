@@ -33,6 +33,7 @@ namespace riptide_rviz
         rclcpp::Subscription<diagnostic_msgs::msg::DiagnosticArray>::SharedPtr diagSub;
 
         int voltageTextId = -1;
+        int ledConfigId = -1;
 
     };
 } // namespace riptide_rviz

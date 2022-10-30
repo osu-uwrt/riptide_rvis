@@ -22,16 +22,9 @@ namespace riptide_rviz
         );
 
         PaintedTextConfig initText = {
-            0,
-            0,
-            0,
-            0,
-            "No Diag",
-            "",
-            false,
-            2,
-            12,
-            QColor(255, 0, 0, 255)
+            0, 0, 0, 0, "00.00 V",
+            "", false, 2, 12,
+            QColor(255, 0, 255, 255)
         };
 
         std::cerr << "Placing inital text" << std::endl;
@@ -39,12 +32,12 @@ namespace riptide_rviz
         voltageTextId = addText(initText);
 
         PaintedCircleConfig ledConfig = {
-            50, 50, 0, 0,
-            25, 30,
-            QColor(255, 0, 0, 255), QColor(0, 0, 0, 255)
+            40, 60, 0, 0, 25, 30,
+            QColor(0, 255, 255, 200),
+            QColor(0, 0, 0, 200)
         };
 
-        addCircle(ledConfig);
+        ledConfigId = addCircle(ledConfig);
     }
 
     void DiagnosticOverlay::diagnosticCallback(const diagnostic_msgs::msg::DiagnosticArray & msg){
@@ -52,28 +45,18 @@ namespace riptide_rviz
         for(auto diagnostic : msg.status){
             // handle robot voltage packet
             if(diagnostic.name == "/Robot Diagnostics/Electronics/Voltages and Currents/V+ Rail Voltage"){
-                
+                // set text to ??? and color to red
+                PaintedTextConfig initText = {
+                    0, 0, 0, 0, "00.00 V",
+                    "", false, 2, 12,
+                    QColor(255, 0, 0, 255)
+                };
                     
                 if(diagnostic.message.find("No data") != std::string::npos){
-                    // set text to ??? and color to red
-                    PaintedTextConfig initText = {
-                        0,
-                        0,
-                        0,
-                        0,
-                        "???",
-                        "",
-                        false,
-                        2,
-                        12,
-                        QColor(255, 0, 0, 255)
-                    };
-
                     updateText(voltageTextId, initText);
-                    
                 }
                 else{
-                    // now we need to look at the status of the device to determine color
+                    // now we need to look at the status of the voltage to determine color
                     // ok is green, warn is yellow, error is red
                     if(diagnostic.message == "Error"){
                         //
