@@ -24,9 +24,4 @@
             RVIZ Plugin for rendering riptide vehicle diagnostics on the RVIZ display
         </description>
     </class>
-    <class name="riptide_rviz/OverlayTextDisplay" type="riptide_rviz::OverlayTextDisplay" base_class_type="rviz_common::Display">
-        <description>
-            Test RVIZ plugin for rendering 2d text over the main window
-        </description>
-    </class>
 </library>

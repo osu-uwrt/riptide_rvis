@@ -14,12 +14,37 @@ namespace riptide_rviz
     }
 
     void DiagnosticOverlay::onInitialize(){
-        OverlayTextDisplay::onInitialize();
+        OverlayDisplay::onInitialize();
 
         // make the diagnostic subscriber
         diagSub = nodeHandle->create_subscription<diagnostic_msgs::msg::DiagnosticArray>(
             "/diagnostics_agg", rclcpp::SystemDefaultsQoS(), std::bind(&DiagnosticOverlay::diagnosticCallback, this, _1)
         );
+
+        PaintedTextConfig initText = {
+            0,
+            0,
+            0,
+            0,
+            "No Diag",
+            "",
+            false,
+            2,
+            12,
+            QColor(255, 0, 0, 255)
+        };
+
+        std::cerr << "Placing inital text" << std::endl;
+
+        voltageTextId = addText(initText);
+
+        PaintedCircleConfig ledConfig = {
+            50, 50, 0, 0,
+            25, 30,
+            QColor(255, 0, 0, 255), QColor(0, 0, 0, 255)
+        };
+
+        addCircle(ledConfig);
     }
 
     void DiagnosticOverlay::diagnosticCallback(const diagnostic_msgs::msg::DiagnosticArray & msg){
@@ -27,41 +52,41 @@ namespace riptide_rviz
         for(auto diagnostic : msg.status){
             // handle robot voltage packet
             if(diagnostic.name == "/Robot Diagnostics/Electronics/Voltages and Currents/V+ Rail Voltage"){
-                FrameProperties props = {
-                    "",
-                    300,
-                    100,
-
-                    12,
-                    0,
-                    0,
-
-                    QColor(0, 0, 0, 0),
-                    QColor(255, 0, 0, 255),
-
-                    300
-                };
+                
                     
                 if(diagnostic.message.find("No data") != std::string::npos){
                     // set text to ??? and color to red
-                    props.text = "???";
-                    props.fg_color_ = QColor(255, 0, 0, 255);
+                    PaintedTextConfig initText = {
+                        0,
+                        0,
+                        0,
+                        0,
+                        "???",
+                        "",
+                        false,
+                        2,
+                        12,
+                        QColor(255, 0, 0, 255)
+                    };
+
+                    updateText(voltageTextId, initText);
+                    
                 }
                 else{
                     // now we need to look at the status of the device to determine color
                     // ok is green, warn is yellow, error is red
                     if(diagnostic.message == "Error"){
-                        props.fg_color_ = QColor(255, 0, 0, 255);
+                        //
                     } else if (diagnostic.message == "Warn"){
-                        props.fg_color_ = QColor(255, 255, 0, 255);
+                        //
                     } else {
-                        props.fg_color_ = QColor(0, 255, 0, 255);
+                        //
                     }
-                    props.text = "33.5V";
+                    
 
                 }
 
-                setText(props, true);
+                // edit the text
             }
         }
 
@@ -69,22 +94,22 @@ namespace riptide_rviz
     }
     
     void DiagnosticOverlay::onEnable(){
-        OverlayTextDisplay::onEnable();
+        OverlayDisplay::onEnable();
     }
     
     void DiagnosticOverlay::onDisable(){
-        OverlayTextDisplay::onDisable();
+        OverlayDisplay::onDisable();
         
     }
     
     void DiagnosticOverlay::update(float wall_dt, float ros_dt){
         rclcpp::spin_some(nodeHandle);
 
-        OverlayTextDisplay::update(wall_dt, ros_dt);
+        OverlayDisplay::update(wall_dt, ros_dt);
     }
 
     void DiagnosticOverlay::reset(){
-        OverlayTextDisplay::reset();
+        OverlayDisplay::reset();
 
     }
 

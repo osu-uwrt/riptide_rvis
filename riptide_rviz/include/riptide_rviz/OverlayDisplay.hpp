@@ -48,14 +48,31 @@
     #include <std_msgs/msg/color_rgba.h>
 
     #include "riptide_rviz/overlay_utils.hpp"
+
+    #include <vector>
+
 #endif
 
 namespace riptide_rviz {
-    class OverlayTextDisplay : public rviz_common::Display {
+    struct PaintedTextConfig {
+        int x_, y_, height_, width_;
+        std::string text_, font_name_;
+        bool invert_shadow_;
+        int line_width_, font_size_;
+        QColor text_color_;
+    };
+
+    struct PaintedCircleConfig {
+        int x_, y_, height_, width_;
+        int inner_radius_, outer_radius_;
+        QColor inner_color_, outer_color_;
+    };
+
+    class OverlayDisplay : public rviz_common::Display {
         Q_OBJECT
       public:
-        OverlayTextDisplay();
-        virtual ~OverlayTextDisplay();
+        OverlayDisplay();
+        virtual ~OverlayDisplay();
 
         virtual void onInitialize() override;
         virtual void onEnable() override;
@@ -63,53 +80,52 @@ namespace riptide_rviz {
         virtual void update(float wall_dt, float ros_dt) override;
         virtual void reset() override;
 
-        void setText(const FrameProperties & prop, bool show);
+        // methods to add text and shapes to the renderer
+        int addText(const PaintedTextConfig & config);
+        int addCircle(const PaintedCircleConfig & config);
+
+        // methods to update text and shape overlays
+        void updateText(int index, const PaintedTextConfig & config);
+        void updateCircle(int index, const PaintedCircleConfig & config);
+
+        void clearElements();
 
       protected:
+        // helper functions for drawing text and other things on the base figure
+        void paintText(const PaintedTextConfig & config, QPainter & painter);
+        void paintCircle(const PaintedCircleConfig & config, QPainter & painter);
+
         OverlayObject::SharedPtr overlay_;
 
         int texture_width_;
         int texture_height_;
-
-        bool align_bottom_;
-        bool invert_shadow_;
-        QColor bg_color_;
-        QColor fg_color_;
-        int text_size_;
-        int line_width_;
-        std::string text_;
-        QStringList font_families_;
-        std::string font_;
         int horizontal_dist_;
         int vertical_dist_;
+
         HorizontalAlignment horizontal_alignment_;
         VerticalAlignment vertical_alignment_;
 
+        QColor bg_color_;
+
         bool require_update_texture_;
         // properties are raw pointers since they are owned by Qt
-        rviz_common::properties::BoolProperty *align_bottom_property_;
-        rviz_common::properties::BoolProperty *invert_shadow_property_;
         rviz_common::properties::IntProperty *hor_dist_property_;
         rviz_common::properties::IntProperty *ver_dist_property_;
         rviz_common::properties::EnumProperty *hor_alignment_property_;
         rviz_common::properties::EnumProperty *ver_alignment_property_;
         rviz_common::properties::IntProperty *width_property_;
         rviz_common::properties::IntProperty *height_property_;
-        rviz_common::properties::IntProperty *text_size_property_;
-        rviz_common::properties::IntProperty *line_width_property_;
-        rviz_common::properties::EnumProperty *font_property_;
+
+        // vectors for holding each of the object types
+        std::vector<PaintedTextConfig> text_vector_;
+        std::vector<PaintedCircleConfig> circle_vector_;
 
       protected Q_SLOTS:
-        void updateAlignBottom();
-        void updateInvertShadow();
         void updateHorizontalDistance();
         void updateVerticalDistance();
         void updateHorizontalAlignment();
         void updateVerticalAlignment();
         void updateWidth();
         void updateHeight();
-        void updateTextSize();
-        void updateFont();
-        void updateLineWidth();
     };
 } // namespace riptide_rviz

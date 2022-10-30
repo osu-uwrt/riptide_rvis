@@ -88,20 +88,6 @@ namespace riptide_rviz {
         CENTER = 2
     };
 
-    struct FrameProperties {
-        std::string text;
-        int texture_width_;
-        int texture_height_;
-
-        int text_size_;
-        int horizontal_dist_;
-        int vertical_dist_;
-
-        QColor bg_color_, fg_color_;
-
-        int line_width_;
-    };
-
     /**
      * Helper class for realizing an overlay object on top of the rviz 3D panel.
      *

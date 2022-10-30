@@ -1,6 +1,6 @@
 #pragma once
 
-#include "riptide_rviz/OverlayTextDisplay.hpp"
+#include "riptide_rviz/OverlayDisplay.hpp"
 
 #include <rclcpp/rclcpp.hpp>
 
@@ -8,7 +8,7 @@
 
 namespace riptide_rviz
 {
-    class DiagnosticOverlay : public OverlayTextDisplay {
+    class DiagnosticOverlay : public OverlayDisplay {
         public:
         DiagnosticOverlay();
 
@@ -31,6 +31,8 @@ namespace riptide_rviz
 
         // subscription for diagnostics
         rclcpp::Subscription<diagnostic_msgs::msg::DiagnosticArray>::SharedPtr diagSub;
+
+        int voltageTextId = -1;
 
     };
 } // namespace riptide_rviz
