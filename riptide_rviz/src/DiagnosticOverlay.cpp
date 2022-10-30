@@ -1,5 +1,8 @@
 #include "riptide_rviz/DiagnosticOverlay.hpp"
 
+#include <QFontDatabase>
+#include <rviz_common/logging.hpp>
+
 using namespace std::placeholders;
 
 namespace riptide_rviz
@@ -8,6 +11,14 @@ namespace riptide_rviz
         // make the ROS node
         auto options = rclcpp::NodeOptions().arguments({});
         nodeHandle = std::make_shared<rclcpp::Node>("riptide_rviz_overlay", options);
+
+        // init font parameter
+        QFontDatabase database;
+        fontFamilies = database.families();
+        fontProperty = new rviz_common::properties::EnumProperty("font", "DejaVu Sans Mono", "font", this, SLOT(updateFont()));
+        for (ssize_t i = 0; i < fontFamilies.size(); i++) {
+            fontProperty->addOption(fontFamilies[i], (int) i);
+        }
     }
 
     DiagnosticOverlay::~DiagnosticOverlay(){
@@ -23,7 +34,7 @@ namespace riptide_rviz
 
         PaintedTextConfig initText = {
             12, 0, 0, 0, "00.00 V",
-            "", false, 2, 12,
+            fontName, false, 2, 12,
             QColor(255, 0, 255, 255)
         };
 
@@ -48,7 +59,7 @@ namespace riptide_rviz
                 // set text to ??? and color to red
                 PaintedTextConfig initText = {
                     12, 0, 0, 0, "00.00 V",
-                    "", false, 2, 12,
+                    fontName, false, 2, 12,
                     QColor(255, 0, 0, 255)
                 };
                     
@@ -71,7 +82,7 @@ namespace riptide_rviz
                 updateText(voltageTextId, initText);
             }
 
-            // handle general packet
+            // handle general packet for LED
             else if(diagnostic.name == "/Robot Diagnostics"){
                 PaintedCircleConfig ledConfig = {
                     40, 60, 0, 0, 25, 30,
@@ -91,6 +102,19 @@ namespace riptide_rviz
                 updateCircle(ledConfigId, ledConfig);
             }
         }
+    }
+
+    void DiagnosticOverlay::updateFont() {
+        int font_index = fontProperty->getOptionInt();
+        if (font_index < fontFamilies.size()) {
+            fontName = fontFamilies[font_index].toStdString();
+        } else {
+            RVIZ_COMMON_LOG_ERROR_STREAM("Unexpected error at selecting font index " << font_index);
+            return;
+        }
+        
+
+        require_update_texture_ = true;
     }
     
     void DiagnosticOverlay::onEnable(){
