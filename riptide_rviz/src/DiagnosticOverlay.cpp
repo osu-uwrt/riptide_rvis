@@ -52,24 +52,23 @@ namespace riptide_rviz
                     QColor(255, 0, 0, 255)
                 };
                     
-                if(diagnostic.message.find("No data") != std::string::npos){
-                    updateText(voltageTextId, initText);
-                }
-                else{
+                if(diagnostic.message.find("No data") == std::string::npos){
                     // now we need to look at the status of the voltage to determine color
                     // ok is green, warn is yellow, error is red
-                    if(diagnostic.message == "Error"){
-                        //
-                    } else if (diagnostic.message == "Warn"){
-                        //
+                    if(diagnostic.level == diagnostic.ERROR){
+                        initText.text_color_ = QColor(255, 0, 0, 255);
+                    } else if (diagnostic.level == diagnostic.WARN){
+                        initText.text_color_ = QColor(255, 255, 0, 255);
                     } else {
-                        //
+                        initText.text_color_ = QColor(0, 255, 0, 255);
                     }
-                    
 
+                    // find voltage
+                    initText.text_ = "20.25 V";
                 }
 
                 // edit the text
+                updateText(voltageTextId, initText);
             }
 
             // handle general packet
@@ -79,6 +78,15 @@ namespace riptide_rviz
                     QColor(255, 0, 0, 255),
                     QColor(0, 0, 0, 255)
                 };
+
+                // Determine the LED color to use
+                if(diagnostic.level == diagnostic.ERROR){
+                    ledConfig.inner_color_ = QColor(255, 0, 0, 255);
+                } else if (diagnostic.level == diagnostic.WARN){
+                    ledConfig.inner_color_ = QColor(255, 255, 0, 255);
+                } else {
+                    ledConfig.inner_color_ = QColor(0, 255, 0, 255);
+                }
 
                 updateCircle(ledConfigId, ledConfig);
             }
