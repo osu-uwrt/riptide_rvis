@@ -9,7 +9,7 @@ Panels:
         - /Odometry1
         - /DiagnosticOverlay1
       Splitter Ratio: 0.5
-    Tree Height: 361
+    Tree Height: 349
   - Class: rviz_common/Selection
     Name: Selection
   - Class: rviz_common/Tool Properties

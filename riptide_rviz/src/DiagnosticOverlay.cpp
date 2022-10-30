@@ -32,23 +32,35 @@ namespace riptide_rviz
             "/diagnostics_agg", rclcpp::SystemDefaultsQoS(), std::bind(&DiagnosticOverlay::diagnosticCallback, this, _1)
         );
 
-        PaintedTextConfig initText = {
-            12, 0, 0, 0, "00.00 V",
+        killSub = nodeHandle->create_subscription<riptide_msgs2::msg::RobotState>(
+            ROBOT_NS + std::string("/state/firmware"), rclcpp::SystemDefaultsQoS(), std::bind(&DiagnosticOverlay::killCallback, this, _1)
+        );
+
+        std::cerr << "Placing inital overlay" << std::endl;
+
+        // add all of the variable design items
+        voltageConfig.text_color_ = QColor(255, 0, 255, 255);
+        voltageTextId = addText(voltageConfig);
+
+        diagLedConfig.inner_color_ = QColor(255, 0, 255, 255);
+        diagLedConfigId = addCircle(diagLedConfig);
+
+        killLedConfig.inner_color_ = QColor(255, 0, 255, 255);
+        killLedConfigId = addCircle(killLedConfig);
+
+        // add the static design items
+        PaintedTextConfig diagLedLabel = {
+            6, 20, 0, 0, "Diag",
             fontName, false, 2, 12,
-            QColor(255, 0, 255, 255)
+            QColor(255, 255, 255, 255)
         };
-
-        std::cerr << "Placing inital text" << std::endl;
-
-        voltageTextId = addText(initText);
-
-        PaintedCircleConfig ledConfig = {
-            40, 60, 0, 0, 25, 30,
-            QColor(255, 0, 255, 255),
-            QColor(0, 0, 0, 255)
+        PaintedTextConfig killLedLabel = {
+            50, 20, 0, 0, "Kill",
+            fontName, false, 2, 12,
+            QColor(255, 255, 255, 255)
         };
-
-        ledConfigId = addCircle(ledConfig);
+        addText(diagLedLabel);
+        addText(killLedLabel);
     }
 
     void DiagnosticOverlay::diagnosticCallback(const diagnostic_msgs::msg::DiagnosticArray & msg){
@@ -56,52 +68,50 @@ namespace riptide_rviz
         for(auto diagnostic : msg.status){
             // handle robot voltage packet
             if(diagnostic.name == "/Robot Diagnostics/Electronics/Voltages and Currents/V+ Rail Voltage"){
-                // set text to ??? and color to red
-                PaintedTextConfig initText = {
-                    12, 0, 0, 0, "00.00 V",
-                    fontName, false, 2, 12,
-                    QColor(255, 0, 0, 255)
-                };
-                    
+                voltageConfig.text_ = "00.00 V";
+                voltageConfig.text_color_ = QColor(255, 0, 0, 255);
                 if(diagnostic.message.find("No data") == std::string::npos){
                     // now we need to look at the status of the voltage to determine color
                     // ok is green, warn is yellow, error is red
                     if(diagnostic.level == diagnostic.ERROR){
-                        initText.text_color_ = QColor(255, 0, 0, 255);
+                        voltageConfig.text_color_ = QColor(255, 0, 0, 255);
                     } else if (diagnostic.level == diagnostic.WARN){
-                        initText.text_color_ = QColor(255, 255, 0, 255);
+                        voltageConfig.text_color_ = QColor(255, 255, 0, 255);
                     } else {
-                        initText.text_color_ = QColor(0, 255, 0, 255);
+                        voltageConfig.text_color_ = QColor(0, 255, 0, 255);
                     }
 
                     // find voltage
-                    initText.text_ = "20.25 V";
+                    voltageConfig.text_ = "20.25 V";
                 }
 
                 // edit the text
-                updateText(voltageTextId, initText);
+                updateText(voltageTextId, voltageConfig);
             }
 
             // handle general packet for LED
             else if(diagnostic.name == "/Robot Diagnostics"){
-                PaintedCircleConfig ledConfig = {
-                    40, 60, 0, 0, 25, 30,
-                    QColor(255, 0, 0, 255),
-                    QColor(0, 0, 0, 255)
-                };
-
                 // Determine the LED color to use
                 if(diagnostic.level == diagnostic.ERROR){
-                    ledConfig.inner_color_ = QColor(255, 0, 0, 255);
+                    diagLedConfig.inner_color_ = QColor(255, 0, 0, 255);
                 } else if (diagnostic.level == diagnostic.WARN){
-                    ledConfig.inner_color_ = QColor(255, 255, 0, 255);
+                    diagLedConfig.inner_color_ = QColor(255, 255, 0, 255);
                 } else {
-                    ledConfig.inner_color_ = QColor(0, 255, 0, 255);
+                    diagLedConfig.inner_color_ = QColor(0, 255, 0, 255);
                 }
 
-                updateCircle(ledConfigId, ledConfig);
+                updateCircle(diagLedConfigId, diagLedConfig);
             }
         }
+    }
+
+    void DiagnosticOverlay::killCallback(const riptide_msgs2::msg::RobotState & msg){
+        if(msg.kill_switch_inserted){
+            killLedConfig.inner_color_ = QColor(0, 255, 0, 255);
+        } else {
+            killLedConfig.inner_color_ = QColor(255, 0, 0, 255);
+        }
+        updateCircle(killLedConfigId, killLedConfig);
     }
 
     void DiagnosticOverlay::updateFont() {
@@ -112,7 +122,7 @@ namespace riptide_rviz
             RVIZ_COMMON_LOG_ERROR_STREAM("Unexpected error at selecting font index " << font_index);
             return;
         }
-        
+
 
         require_update_texture_ = true;
     }
