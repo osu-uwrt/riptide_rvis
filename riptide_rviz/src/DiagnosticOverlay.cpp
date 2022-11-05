@@ -36,7 +36,7 @@ namespace riptide_rviz
             ROBOT_NS + std::string("/state/firmware"), rclcpp::SystemDefaultsQoS(), std::bind(&DiagnosticOverlay::killCallback, this, _1)
         );
 
-        std::cerr << "Placing inital overlay" << std::endl;
+        // std::cerr << "Placing inital overlay" << std::endl;
 
         // add all of the variable design items
         voltageConfig.text_color_ = QColor(255, 0, 255, 255);

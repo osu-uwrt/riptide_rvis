@@ -129,7 +129,7 @@ namespace riptide_rviz {
             return;
         }
 
-        std::cerr << "re-rendering overlay" << std::endl;
+        // std::cerr << "re-rendering overlay" << std::endl;
 
         overlay_->updateTextureSize(texture_width_, texture_height_);
         {
@@ -144,7 +144,7 @@ namespace riptide_rviz {
             // the call that forced the render update needs to have
             // kept all previous info
             for(auto config : text_vector_){
-                std::cerr << "painting text: " << config.text_ << std::endl;
+                // std::cerr << "painting text: " << config.text_ << std::endl;
                 config.width_ = w;
                 config.height_ = h;
                 paintText(config, painter);
@@ -152,7 +152,7 @@ namespace riptide_rviz {
 
             // do the same for all circles
             for(auto config : circle_vector_){
-                std::cerr << "Painting circle: " << config.x_ << " " << config.y_ << std::endl;
+                // std::cerr << "Painting circle: " << config.x_ << " " << config.y_ << std::endl;
                 config.width_ = w;
                 config.height_ = h;
                 paintCircle(config, painter);

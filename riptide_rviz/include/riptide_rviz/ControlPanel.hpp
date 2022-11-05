@@ -16,7 +16,7 @@
 #include "ui_ControlPanel.h"
 #include <QTimer>
 
-#define ODOM_TIMEOUT 25s
+#define ODOM_TIMEOUT 5s
 #define MAX_IN_PLACE_DEPTH 0.5 // distance in M
 
 namespace riptide_rviz
@@ -45,7 +45,7 @@ namespace riptide_rviz
         // slots for handling mode setting of the controller
         void handleEnable();
         void handleDisable(); // pressing disable asserts kill and clears command
-        void switchMode(uint8_t mode);
+        void switchMode(uint8_t mode, bool override=false);
 
         // slots for controlling the UI
         void toggleDegrees();
