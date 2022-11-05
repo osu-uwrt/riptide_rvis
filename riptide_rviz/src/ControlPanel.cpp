@@ -6,6 +6,8 @@
 #include <algorithm>
 #include <iostream>
 
+#include <rviz_common/logging.hpp>
+
 using namespace std::chrono_literals;
 using std::placeholders::_1;
 
@@ -131,50 +133,64 @@ namespace riptide_rviz
         uiPanel->ctrlDisable->setEnabled(false);
 
         // clear the controller command mode
-        ctrlMode = riptide_msgs2::msg::ControllerCommand::DISABLED;
+        switchMode(riptide_msgs2::msg::ControllerCommand::DISABLED, true);
     }
 
-    void ControlPanel::switchMode(uint8_t mode)
+    void ControlPanel::switchMode(uint8_t mode, bool override)
     {
-        ctrlMode = mode;
-        switch (ctrlMode)
-        {
-        case riptide_msgs2::msg::ControllerCommand::POSITION:
-            uiPanel->ctrlModeFFD->setEnabled(true);
-            uiPanel->ctrlModeVel->setEnabled(true);
-            uiPanel->ctrlModePos->setEnabled(false);
-            uiPanel->ctrlModeTele->setEnabled(true);
+        // check the vehicle is enabled or we are overriding
+        if(vehicleEnabled || override){
+            ctrlMode = mode;
+            switch (ctrlMode)
+            {
+            case riptide_msgs2::msg::ControllerCommand::POSITION:
+                uiPanel->ctrlModeFFD->setEnabled(true);
+                uiPanel->ctrlModeVel->setEnabled(true);
+                uiPanel->ctrlModePos->setEnabled(false);
+                uiPanel->ctrlModeTele->setEnabled(true);
 
-            break;
-        case riptide_msgs2::msg::ControllerCommand::VELOCITY:
-            uiPanel->ctrlModeFFD->setEnabled(true);
-            uiPanel->ctrlModeVel->setEnabled(false);
-            uiPanel->ctrlModePos->setEnabled(true);
-            uiPanel->ctrlModeTele->setEnabled(true);
+                break;
+            case riptide_msgs2::msg::ControllerCommand::VELOCITY:
+                uiPanel->ctrlModeFFD->setEnabled(true);
+                uiPanel->ctrlModeVel->setEnabled(false);
+                uiPanel->ctrlModePos->setEnabled(true);
+                uiPanel->ctrlModeTele->setEnabled(true);
 
-            break;
-        case riptide_msgs2::msg::ControllerCommand::FEEDFORWARD:
-            uiPanel->ctrlModeFFD->setEnabled(false);
-            uiPanel->ctrlModeVel->setEnabled(true);
-            uiPanel->ctrlModePos->setEnabled(true);
-            uiPanel->ctrlModeTele->setEnabled(true);
-            break;
-        default:
-            std::cerr << "Button not yet operable" << std::endl;
-            break;
+                break;
+            case riptide_msgs2::msg::ControllerCommand::FEEDFORWARD:
+                uiPanel->ctrlModeFFD->setEnabled(false);
+                uiPanel->ctrlModeVel->setEnabled(true);
+                uiPanel->ctrlModePos->setEnabled(true);
+                uiPanel->ctrlModeTele->setEnabled(true);
+                break;
+            case riptide_msgs2::msg::ControllerCommand::DISABLED:
+                uiPanel->ctrlModeFFD->setEnabled(true);
+                uiPanel->ctrlModeVel->setEnabled(true);
+                uiPanel->ctrlModePos->setEnabled(true);
+                uiPanel->ctrlModeTele->setEnabled(true);
+                break;
+            default:
+                RVIZ_COMMON_LOG_ERROR("Button not yet operable");
+                break;
+            }
         }
     }
 
     void ControlPanel::refreshUI()
     {
         // handle timing out the UI buttons if odom gets too stale
-        auto now = clientNode->get_clock()->now();
-        if (now - odomTime > ODOM_TIMEOUT || !vehicleEnabled)
+        auto diff = clientNode->get_clock()->now() - odomTime;
+        if (diff > ODOM_TIMEOUT || !vehicleEnabled)
         {
             // the odom has timed out
-            if (uiPanel->CtrlSendCmd->isEnabled())
-                std::cerr << "Odom timed out or vehicle disabled! disabling local control buttons" << std::endl;
+            if (uiPanel->CtrlSendCmd->isEnabled()){
+                RVIZ_COMMON_LOG_WARNING("Odom timed out, or vehicle disabled! disabling local control buttons");
 
+                // disable the vehicle
+                handleDisable();
+            }
+
+            // also disable command sending
             uiPanel->ctrlDiveInPlace->setEnabled(false);
             uiPanel->CtrlSendCmd->setEnabled(false);
         }
@@ -212,7 +228,7 @@ namespace riptide_rviz
         if (std::any_of(std::begin(convOk), std::end(convOk), [](bool i)
                         { return !i; }))
         {
-            std::cerr << "Failed to convert current position to floating point" << std::endl;
+            RVIZ_COMMON_LOG_ERROR("Failed to convert current position to floating point");
             
             // set the red stylesheet
             uiPanel->ctrlDiveInPlace->setStyleSheet("QPushButton{color:black; background: red;}");
@@ -302,7 +318,7 @@ namespace riptide_rviz
         if (std::any_of(std::begin(convOk), std::end(convOk), [](bool i)
                         { return !i; }))
         {
-            std::cerr << "Failed to convert requested position to floating point" << std::endl;
+            RVIZ_COMMON_LOG_ERROR("Failed to convert current position to floating point");
             // set the red stylesheet
             uiPanel->CtrlSendCmd->setStyleSheet("QPushButton{color:black; background: red;}");
 

@@ -19,4 +19,9 @@
             RVIZ plugin for controlling the actuators on a riptide vehicle
         </description>
     </class>
+    <class name="riptide_rviz/DiagnosticOverlay" type="riptide_rviz::DiagnosticOverlay" base_class_type="rviz_common::Display">
+        <description>
+            RVIZ Plugin for rendering riptide vehicle diagnostics on the RVIZ display
+        </description>
+    </class>
 </library>
