@@ -38,13 +38,9 @@
 #ifndef Q_MOC_RUN
     #include <OgreColourValue.h>
     #include <OgreMaterial.h>
-    #include <rviz_common/properties/bool_property.hpp>
-    #include <rviz_common/properties/color_property.hpp>
     #include <rviz_common/properties/enum_property.hpp>
-    #include <rviz_common/properties/float_property.hpp>
     #include <rviz_common/properties/int_property.hpp>
-    #include <rviz_common/properties/ros_topic_property.hpp>
-    #include <rviz_common/ros_topic_display.hpp>
+    #include <rviz_common/display.hpp>
     #include <std_msgs/msg/color_rgba.h>
 
     #include "riptide_rviz/overlay_utils.hpp"

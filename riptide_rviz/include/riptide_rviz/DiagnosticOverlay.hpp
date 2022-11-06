@@ -7,7 +7,8 @@
 #include <diagnostic_msgs/msg/diagnostic_array.hpp>
 #include <riptide_msgs2/msg/robot_state.hpp>
 
-#define ROBOT_NS "/tempest"
+#include <rviz_common/properties/string_property.hpp>
+#include <rviz_common/properties/float_property.hpp>
 
 namespace riptide_rviz
 {
@@ -29,12 +30,22 @@ namespace riptide_rviz
         void diagnosticCallback(const diagnostic_msgs::msg::DiagnosticArray & msg);
         void killCallback(const riptide_msgs2::msg::RobotState & msg);
 
+        void checkTimeout();
+
         protected Q_SLOTS:
         void updateFont();
 
         private:
         // internal node
         rclcpp::Node::SharedPtr nodeHandle;
+
+        // timer for determining timeouts
+        rclcpp::TimerBase::SharedPtr checkTimer;
+
+        // times for stamping
+        rclcpp::Time lastDiag, lastKill;
+        bool diagsTimedOut, killTimedOut;
+
 
         // subscription for diagnostics
         rclcpp::Subscription<diagnostic_msgs::msg::DiagnosticArray>::SharedPtr diagSub;
@@ -51,6 +62,8 @@ namespace riptide_rviz
 
         // Addtional RVIZ settings
         rviz_common::properties::EnumProperty *fontProperty;
+        rviz_common::properties::StringProperty * robotNsProperty;
+        rviz_common::properties::FloatProperty * timeoutProperty;
 
         // configurations for display items
         PaintedCircleConfig diagLedConfig = {

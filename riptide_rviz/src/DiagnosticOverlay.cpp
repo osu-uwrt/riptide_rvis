@@ -4,13 +4,18 @@
 #include <rviz_common/logging.hpp>
 
 using namespace std::placeholders;
+using namespace std::chrono_literals;
 
 namespace riptide_rviz
 {
     DiagnosticOverlay::DiagnosticOverlay(){
         // make the ROS node
         auto options = rclcpp::NodeOptions().arguments({});
-        nodeHandle = std::make_shared<rclcpp::Node>("riptide_rviz_overlay", options);
+        nodeHandle = std::make_shared<rclcpp::Node>("riptide_rviz_diag_overlay", options);
+
+        // backdate timeouts
+        lastDiag = nodeHandle->get_clock()->now() - 1h;
+        lastKill = nodeHandle->get_clock()->now() - 1h;
 
         // init font parameter
         QFontDatabase database;
@@ -19,9 +24,21 @@ namespace riptide_rviz
         for (ssize_t i = 0; i < fontFamilies.size(); i++) {
             fontProperty->addOption(fontFamilies[i], (int) i);
         }
+
+        robotNsProperty = new rviz_common::properties::StringProperty(
+            "robot_namespace", "/tempest", "Robot namespace to attach to", this
+        );
+
+        timeoutProperty = new rviz_common::properties::FloatProperty(
+            "diagnostic_timeout", 10.0, "Maximum time between diagnostic packets before indicators default", this
+        );
+
+
     }
 
     DiagnosticOverlay::~DiagnosticOverlay(){
+        delete robotNsProperty;
+        delete timeoutProperty;
     }
 
     void DiagnosticOverlay::onInitialize(){
@@ -33,10 +50,11 @@ namespace riptide_rviz
         );
 
         killSub = nodeHandle->create_subscription<riptide_msgs2::msg::RobotState>(
-            ROBOT_NS + std::string("/state/firmware"), rclcpp::SystemDefaultsQoS(), std::bind(&DiagnosticOverlay::killCallback, this, _1)
+            robotNsProperty->getStdString() + std::string("/state/firmware"), rclcpp::SystemDefaultsQoS(), std::bind(&DiagnosticOverlay::killCallback, this, _1)
         );
 
-        // std::cerr << "Placing inital overlay" << std::endl;
+        // watchdog timers for handling timeouts
+        checkTimer = nodeHandle->create_wall_timer(0.25s, std::bind(&DiagnosticOverlay::checkTimeout, this));
 
         // add all of the variable design items
         voltageConfig.text_color_ = QColor(255, 0, 255, 255);
@@ -64,6 +82,10 @@ namespace riptide_rviz
     }
 
     void DiagnosticOverlay::diagnosticCallback(const diagnostic_msgs::msg::DiagnosticArray & msg){
+        // write down the timestamp that it was recieved
+        lastDiag = nodeHandle->get_clock()->now();
+        diagsTimedOut = false;
+
         // look for specific packets
         for(auto diagnostic : msg.status){
             // handle robot voltage packet
@@ -81,8 +103,8 @@ namespace riptide_rviz
                         voltageConfig.text_color_ = QColor(0, 255, 0, 255);
                     }
 
-                    // find voltage
-                    voltageConfig.text_ = "20.25 V";
+                    // TODO find voltage
+                    voltageConfig.text_ = "Not Implemented V";
                 }
 
                 // edit the text
@@ -106,6 +128,10 @@ namespace riptide_rviz
     }
 
     void DiagnosticOverlay::killCallback(const riptide_msgs2::msg::RobotState & msg){
+        // write down the time that we recieve the last kill msg
+        lastKill = nodeHandle->get_clock()->now();
+        killTimedOut = false;
+
         if(msg.kill_switch_inserted){
             killLedConfig.inner_color_ = QColor(0, 255, 0, 255);
         } else {
@@ -142,14 +168,45 @@ namespace riptide_rviz
         OverlayDisplay::update(wall_dt, ros_dt);
     }
 
+    void DiagnosticOverlay::checkTimeout(){
+        // read current timeout property and convert to duration
+        auto timeoutDur = std::chrono::duration<double>(timeoutProperty->getFloat());
+
+        // check for diagnostic timeout
+        auto duration = nodeHandle->get_clock()->now() - lastDiag;
+        if(duration > timeoutDur){
+            if(! diagsTimedOut){
+                RVIZ_COMMON_LOG_WARNING("Diagnostics timed out!");
+                diagsTimedOut = true;
+            }
+
+            // diagnostics timed out, reset them
+            voltageConfig.text_color_ = QColor(255, 0, 255, 255);
+            updateText(voltageTextId, voltageConfig);
+
+            diagLedConfig.inner_color_ = QColor(255, 0, 255, 255);
+            updateCircle(diagLedConfigId, diagLedConfig);
+        }
+
+        // check for kill timeout
+        duration = nodeHandle->get_clock()->now() - lastKill;
+        if(duration > timeoutDur){
+            if(! killTimedOut){
+                RVIZ_COMMON_LOG_WARNING("Kill switch timed out!");
+                killTimedOut = true;
+            }
+
+            // diagnostics timed out, reset them
+            killLedConfig.inner_color_ = QColor(255, 0, 255, 255);
+            updateCircle(killLedConfigId, killLedConfig);
+        }
+    }
+
     void DiagnosticOverlay::reset(){
         OverlayDisplay::reset();
-
     }
 
 } // namespace riptide_rviz
 
-
-// Since this is a parent class this has been removed
 #include <pluginlib/class_list_macros.hpp>
 PLUGINLIB_EXPORT_CLASS(riptide_rviz::DiagnosticOverlay, rviz_common::Display)
