@@ -11,8 +11,6 @@
 using namespace std::chrono_literals;
 using std::placeholders::_1;
 
-#define ROBOT_NS "/tempest"
-
 namespace riptide_rviz
 {
     ControlPanel::ControlPanel(QWidget *parent) : rviz_common::Panel(parent)
@@ -32,6 +30,7 @@ namespace riptide_rviz
 
     void ControlPanel::onInitialize()
     {
+        // RVIZ_COMMON_LOG_INFO("Initializing");
         // create a spin timer
         spinTimer = new QTimer(this);
         connect(spinTimer, &QTimer::timeout, [this](void)
@@ -43,24 +42,13 @@ namespace riptide_rviz
                 { refreshUI(); });
         uiTimer->start(100);
 
-        // make publishers
-        killStatePub = clientNode->create_publisher<riptide_msgs2::msg::KillSwitchReport>(ROBOT_NS + std::string("/control/software_kill"), rclcpp::SystemDefaultsQoS());
-        ctrlCmdLinPub = clientNode->create_publisher<riptide_msgs2::msg::ControllerCommand>(ROBOT_NS + std::string("/controller/linear"), rclcpp::SystemDefaultsQoS());
-        ctrlCmdAngPub = clientNode->create_publisher<riptide_msgs2::msg::ControllerCommand>(ROBOT_NS + std::string("/controller/angular"), rclcpp::SystemDefaultsQoS());
-
         // make ROS timers
         killPubTimer = clientNode->create_wall_timer(50ms, std::bind(&ControlPanel::sendKillMsgTimer, this));
 
-        // make ROS Subscribers
-        odomSub = clientNode->create_subscription<nav_msgs::msg::Odometry>(
-            ROBOT_NS + std::string("/odometry/filtered"), rclcpp::SystemDefaultsQoS(),
-            std::bind(&ControlPanel::odomCallback, this, _1));
-        steadySub = clientNode->create_subscription<std_msgs::msg::Bool>(
-            ROBOT_NS + std::string("/controller/steady"), rclcpp::SystemDefaultsQoS(),
-            std::bind(&ControlPanel::steadyCallback, this, _1));
+        // setup goal_pose sub
         selectPoseSub = clientNode->create_subscription<geometry_msgs::msg::PoseStamped>(
             "goal_pose", rclcpp::SystemDefaultsQoS(),
-            std::bind(&ControlPanel::selectedPose, this, _1));
+            std::bind(&ControlPanel::selectedPose, this, _1)); 
 
         // Connect UI signals for controlling the riptide vehicle
         connect(uiPanel->ctrlEnable, &QPushButton::clicked, [this](void)
@@ -95,12 +83,75 @@ namespace riptide_rviz
 
     void ControlPanel::load(const rviz_common::Config &config)
     {
+        // RVIZ_COMMON_LOG_INFO("Loading config");
+        // load the parent class config
         rviz_common::Panel::load(config);
+
+        // create our value containers
+        QString * str = new QString();
+        float * configVal = new float();
+
+        // load the namesapce param
+        if(config.mapGetString("namespace", str)){
+            robot_ns = str->toStdString();
+        } else {
+            // default value
+            robot_ns = "/tempest";
+            RVIZ_COMMON_LOG_WARNING("Loading default value for 'namespace'");
+        }
+
+        if(config.mapGetFloat("odom_timeout", configVal)){
+            odom_timeout = std::chrono::duration<double>(*configVal);
+        } else {
+            // default value
+            odom_timeout = std::chrono::duration<double>(2.5);
+            RVIZ_COMMON_LOG_WARNING("Loading default value for 'odom_timeout'");
+        }
+
+        if(config.mapGetFloat("tgt_in_place_depth", configVal)){
+            tgt_in_place_depth = *configVal;
+        } else {
+            // default value
+            tgt_in_place_depth = -0.75;
+            RVIZ_COMMON_LOG_WARNING("Loading default value for 'tgt_in_place_depth'");
+        }
+
+        if(config.mapGetFloat("max_depth_in_place", configVal)){
+            max_depth_in_place = *configVal;
+        } else {
+            // default value
+            max_depth_in_place = -0.5;
+            RVIZ_COMMON_LOG_WARNING("Loading default value for 'max_depth_in_place'");
+        }
+
+        // Free the allocated containers
+        delete str;
+        delete configVal; 
+
+        // setup the ROS topics that depend on namespace
+        // make publishers
+        killStatePub = clientNode->create_publisher<riptide_msgs2::msg::KillSwitchReport>(robot_ns + "/control/software_kill", rclcpp::SystemDefaultsQoS());
+        ctrlCmdLinPub = clientNode->create_publisher<riptide_msgs2::msg::ControllerCommand>(robot_ns + "/controller/linear", rclcpp::SystemDefaultsQoS());
+        ctrlCmdAngPub = clientNode->create_publisher<riptide_msgs2::msg::ControllerCommand>(robot_ns + "/controller/angular", rclcpp::SystemDefaultsQoS());
+
+        // make ROS Subscribers
+        odomSub = clientNode->create_subscription<nav_msgs::msg::Odometry>(
+            robot_ns + "/odometry/filtered", rclcpp::SystemDefaultsQoS(),
+            std::bind(&ControlPanel::odomCallback, this, _1));
+        steadySub = clientNode->create_subscription<std_msgs::msg::Bool>(
+            robot_ns + "/controller/steady", rclcpp::SystemDefaultsQoS(),
+            std::bind(&ControlPanel::steadyCallback, this, _1));          
     }
 
     void ControlPanel::save(rviz_common::Config config) const
     {
         rviz_common::Panel::save(config);
+
+        // write our config values
+        config.mapSetValue("namespace", QString::fromStdString(robot_ns));
+        config.mapSetValue("odom_timeout", odom_timeout.count());
+        config.mapSetValue("max_depth_in_place", max_depth_in_place);
+        config.mapSetValue("tgt_in_place_depth", tgt_in_place_depth);
     }
 
     bool ControlPanel::event(QEvent *event)
@@ -180,7 +231,7 @@ namespace riptide_rviz
     {
         // handle timing out the UI buttons if odom gets too stale
         auto diff = clientNode->get_clock()->now() - odomTime;
-        if (diff > ODOM_TIMEOUT || !vehicleEnabled)
+        if (diff.to_chrono<std::chrono::seconds>() > odom_timeout || !vehicleEnabled)
         {
             // the odom has timed out
             if (uiPanel->CtrlSendCmd->isEnabled()){
@@ -201,7 +252,7 @@ namespace riptide_rviz
             // check the current depth. if we are below 0.5m, disable the submerge in place button
             bool convOk;
             double z = uiPanel->cmdCurrZ->text().toDouble(&convOk);
-            if (convOk && z < -MAX_IN_PLACE_DEPTH)
+            if (convOk && z < max_depth_in_place)
             {
                 uiPanel->ctrlDiveInPlace->setEnabled(false);
             }
@@ -244,7 +295,8 @@ namespace riptide_rviz
         auto linCmd = riptide_msgs2::msg::ControllerCommand();
         linCmd.setpoint_vect.x = x;
         linCmd.setpoint_vect.y = y;
-        linCmd.setpoint_vect.z = -0.75; // automatically go to 0.75m below surface
+        // automatically go to configured depth below surface
+        linCmd.setpoint_vect.z = tgt_in_place_depth; 
         linCmd.mode = riptide_msgs2::msg::ControllerCommand::POSITION;
 
         // check the angle mode button
