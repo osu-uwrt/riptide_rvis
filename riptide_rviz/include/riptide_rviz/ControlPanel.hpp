@@ -16,9 +16,6 @@
 #include "ui_ControlPanel.h"
 #include <QTimer>
 
-#define ODOM_TIMEOUT 25s
-#define MAX_IN_PLACE_DEPTH 0.5 // distance in M
-
 namespace riptide_rviz
 {
 
@@ -45,7 +42,7 @@ namespace riptide_rviz
         // slots for handling mode setting of the controller
         void handleEnable();
         void handleDisable(); // pressing disable asserts kill and clears command
-        void switchMode(uint8_t mode);
+        void switchMode(uint8_t mode, bool override=false);
 
         // slots for controlling the UI
         void toggleDegrees();
@@ -62,6 +59,13 @@ namespace riptide_rviz
     private:
         // UI Panel instance
         Ui_ControlPanel *uiPanel;
+
+        // robot namespace used for config save and load
+        std::string robot_ns;
+
+        // doubles for max depth and duration for odom timeout
+        double max_depth_in_place, tgt_in_place_depth;
+        std::chrono::duration<double> odom_timeout;
 
         // mode for sending commands to the controller
         uint8_t ctrlMode;

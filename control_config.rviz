@@ -1,14 +1,13 @@
 Panels:
   - Class: rviz_common/Displays
-    Help Height: 78
+    Help Height: 70
     Name: Displays
     Property Tree Widget:
       Expanded:
         - /Global Options1
-        - /TF1/Frames1
-        - /Odometry1
-      Splitter Ratio: 0.5
-    Tree Height: 343
+        - /Status1
+      Splitter Ratio: 0.6117647290229797
+    Tree Height: 568
   - Class: rviz_common/Selection
     Name: Selection
   - Class: rviz_common/Tool Properties
@@ -33,6 +32,10 @@ Panels:
     Name: MissionPanel
   - Class: riptide_rviz/ControlPanel
     Name: ControlPanel
+    max_depth_in_place: -0.5
+    namespace: /tempest
+    odom_timeout: 2.5
+    tgt_in_place_depth: -0.75
   - Class: riptide_rviz/Bringup
     Name: Bringup
   - Class: riptide_rviz/Actuators
@@ -60,7 +63,7 @@ Visualization Manager:
       Plane Cell Count: 10
       Reference Frame: <Fixed Frame>
       Value: true
-    - Alpha: 0.6000000238418579
+    - Alpha: 1
       Class: rviz_default_plugins/RobotModel
       Collision Enabled: false
       Description File: ""
@@ -78,6 +81,114 @@ Visualization Manager:
         Expand Link Details: false
         Expand Tree: false
         Link Tree Style: Links in Alphabetic Order
+        tempest/base_inertia:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        tempest/base_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        tempest/claw_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        tempest/droppers_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        tempest/dvl_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        tempest/imu_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        tempest/imu_revolute_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        tempest/origin:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        tempest/pose_sensor_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        tempest/pressure_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        tempest/stereo/left_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        tempest/stereo/left_optical:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        tempest/stereo/right_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        tempest/stereo/right_optical:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        tempest/thruster_0:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        tempest/thruster_1:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        tempest/thruster_2:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        tempest/thruster_3:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        tempest/thruster_4:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        tempest/thruster_5:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        tempest/thruster_6:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        tempest/thruster_7:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        tempest/torpedo_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
       Mass Properties:
         Inertia: false
         Mass: false
@@ -91,13 +202,106 @@ Visualization Manager:
       Frame Timeout: 15
       Frames:
         All Enabled: false
+        odom:
+          Value: true
+        tempest/base_inertia:
+          Value: false
+        tempest/base_link:
+          Value: true
+        tempest/claw_link:
+          Value: false
+        tempest/droppers_link:
+          Value: false
+        tempest/dvl_link:
+          Value: false
+        tempest/imu_link:
+          Value: false
+        tempest/imu_revolute_link:
+          Value: false
+        tempest/origin:
+          Value: false
+        tempest/pose_sensor_link:
+          Value: false
+        tempest/pressure_link:
+          Value: false
+        tempest/stereo/left_link:
+          Value: false
+        tempest/stereo/left_optical:
+          Value: false
+        tempest/stereo/right_link:
+          Value: false
+        tempest/stereo/right_optical:
+          Value: false
+        tempest/thruster_0:
+          Value: false
+        tempest/thruster_1:
+          Value: false
+        tempest/thruster_2:
+          Value: false
+        tempest/thruster_3:
+          Value: false
+        tempest/thruster_4:
+          Value: false
+        tempest/thruster_5:
+          Value: false
+        tempest/thruster_6:
+          Value: false
+        tempest/thruster_7:
+          Value: false
+        tempest/torpedo_link:
+          Value: false
+        world:
+          Value: true
       Marker Scale: 1
       Name: TF
       Show Arrows: true
       Show Axes: true
       Show Names: false
       Tree:
-        {}
+        world:
+          odom:
+            tempest/base_link:
+              tempest/origin:
+                tempest/base_inertia:
+                  {}
+                tempest/claw_link:
+                  {}
+                tempest/droppers_link:
+                  {}
+                tempest/dvl_link:
+                  {}
+                tempest/imu_link:
+                  {}
+                tempest/imu_revolute_link:
+                  {}
+                tempest/pressure_link:
+                  {}
+                tempest/stereo/left_link:
+                  tempest/stereo/left_optical:
+                    {}
+                  tempest/stereo/right_link:
+                    tempest/stereo/right_optical:
+                      {}
+                tempest/thruster_0:
+                  {}
+                tempest/thruster_1:
+                  {}
+                tempest/thruster_2:
+                  {}
+                tempest/thruster_3:
+                  {}
+                tempest/thruster_4:
+                  {}
+                tempest/thruster_5:
+                  {}
+                tempest/thruster_6:
+                  {}
+                tempest/thruster_7:
+                  {}
+                tempest/torpedo_link:
+                  {}
+              tempest/pose_sensor_link:
+                {}
       Update Interval: 0
       Value: true
     - Angle Tolerance: 0.10000000149011612
@@ -139,160 +343,8 @@ Visualization Manager:
         Reliability Policy: Reliable
         Value: /tempest/odometry/filtered
       Value: true
-    - Accept NaN Values: false
-      Alpha: 1
-      Arrow Width: 0.05000000074505806
-      Class: rviz_default_plugins/Wrench
-      Enabled: true
-      Force Arrow Scale: 0.05000000074505806
-      Force Color: 204; 51; 51
-      History Length: 1
-      Name: Wrench
-      Topic:
-        Depth: 5
-        Durability Policy: Volatile
-        Filter size: 10
-        History Policy: Keep Last
-        Reliability Policy: Reliable
-        Value: /tempest/thruster_wrenches/thruster_0
-      Torque Arrow Scale: 2
-      Torque Color: 204; 204; 51
-      Value: true
-    - Accept NaN Values: false
-      Alpha: 1
-      Arrow Width: 0.05000000074505806
-      Class: rviz_default_plugins/Wrench
-      Enabled: true
-      Force Arrow Scale: 0.05000000074505806
-      Force Color: 204; 51; 51
-      History Length: 1
-      Name: Wrench
-      Topic:
-        Depth: 5
-        Durability Policy: Volatile
-        Filter size: 10
-        History Policy: Keep Last
-        Reliability Policy: Reliable
-        Value: /tempest/thruster_wrenches/thruster_1
-      Torque Arrow Scale: 2
-      Torque Color: 204; 204; 51
-      Value: true
-    - Accept NaN Values: false
-      Alpha: 1
-      Arrow Width: 0.05000000074505806
-      Class: rviz_default_plugins/Wrench
-      Enabled: true
-      Force Arrow Scale: 0.05000000074505806
-      Force Color: 204; 51; 51
-      History Length: 1
-      Name: Wrench
-      Topic:
-        Depth: 5
-        Durability Policy: Volatile
-        Filter size: 10
-        History Policy: Keep Last
-        Reliability Policy: Reliable
-        Value: /tempest/thruster_wrenches/thruster_2
-      Torque Arrow Scale: 2
-      Torque Color: 204; 204; 51
-      Value: true
-    - Accept NaN Values: false
-      Alpha: 1
-      Arrow Width: 0.05000000074505806
-      Class: rviz_default_plugins/Wrench
-      Enabled: true
-      Force Arrow Scale: 0.05000000074505806
-      Force Color: 204; 51; 51
-      History Length: 1
-      Name: Wrench
-      Topic:
-        Depth: 5
-        Durability Policy: Volatile
-        Filter size: 10
-        History Policy: Keep Last
-        Reliability Policy: Reliable
-        Value: /tempest/thruster_wrenches/thruster_3
-      Torque Arrow Scale: 2
-      Torque Color: 204; 204; 51
-      Value: true
-    - Accept NaN Values: false
-      Alpha: 1
-      Arrow Width: 0.05000000074505806
-      Class: rviz_default_plugins/Wrench
-      Enabled: true
-      Force Arrow Scale: 0.05000000074505806
-      Force Color: 204; 51; 51
-      History Length: 1
-      Name: Wrench
-      Topic:
-        Depth: 5
-        Durability Policy: Volatile
-        Filter size: 10
-        History Policy: Keep Last
-        Reliability Policy: Reliable
-        Value: /tempest/thruster_wrenches/thruster_4
-      Torque Arrow Scale: 2
-      Torque Color: 204; 204; 51
-      Value: true
-    - Accept NaN Values: false
-      Alpha: 1
-      Arrow Width: 0.05000000074505806
-      Class: rviz_default_plugins/Wrench
-      Enabled: true
-      Force Arrow Scale: 0.05000000074505806
-      Force Color: 204; 51; 51
-      History Length: 1
-      Name: Wrench
-      Topic:
-        Depth: 5
-        Durability Policy: Volatile
-        Filter size: 10
-        History Policy: Keep Last
-        Reliability Policy: Reliable
-        Value: /tempest/thruster_wrenches/thruster_5
-      Torque Arrow Scale: 2
-      Torque Color: 204; 204; 51
-      Value: true
-    - Accept NaN Values: false
-      Alpha: 1
-      Arrow Width: 0.05000000074505806
-      Class: rviz_default_plugins/Wrench
-      Enabled: true
-      Force Arrow Scale: 0.05000000074505806
-      Force Color: 204; 51; 51
-      History Length: 1
-      Name: Wrench
-      Topic:
-        Depth: 5
-        Durability Policy: Volatile
-        Filter size: 10
-        History Policy: Keep Last
-        Reliability Policy: Reliable
-        Value: /tempest/thruster_wrenches/thruster_6
-      Torque Arrow Scale: 2
-      Torque Color: 204; 204; 51
-      Value: true
-    - Accept NaN Values: false
-      Alpha: 1
-      Arrow Width: 0.05000000074505806
-      Class: rviz_default_plugins/Wrench
-      Enabled: true
-      Force Arrow Scale: 0.05000000074505806
-      Force Color: 204; 51; 51
-      History Length: 1
-      Name: Wrench
-      Topic:
-        Depth: 5
-        Durability Policy: Volatile
-        Filter size: 10
-        History Policy: Keep Last
-        Reliability Policy: Reliable
-        Value: /tempest/thruster_wrenches/thruster_7
-      Torque Arrow Scale: 2
-      Torque Color: 204; 204; 51
-      Value: true
     - Class: rviz_default_plugins/Image
-      Enabled: true
+      Enabled: false
       Max Value: 1
       Median window: 5
       Min Value: 0
@@ -304,11 +356,180 @@ Visualization Manager:
         History Policy: Keep Last
         Reliability Policy: Reliable
         Value: /tempest/yolov5/image_detection
+      Value: false
+    - Class: rviz_common/Group
+      Displays:
+        - Accept NaN Values: false
+          Alpha: 1
+          Arrow Width: 0.05000000074505806
+          Class: rviz_default_plugins/Wrench
+          Enabled: true
+          Force Arrow Scale: 0.05000000074505806
+          Force Color: 204; 51; 51
+          History Length: 1
+          Name: Wrench
+          Topic:
+            Depth: 5
+            Durability Policy: Volatile
+            Filter size: 10
+            History Policy: Keep Last
+            Reliability Policy: Reliable
+            Value: /tempest/thruster_wrenches/thruster_0
+          Torque Arrow Scale: 2
+          Torque Color: 204; 204; 51
+          Value: true
+        - Accept NaN Values: false
+          Alpha: 1
+          Arrow Width: 0.05000000074505806
+          Class: rviz_default_plugins/Wrench
+          Enabled: true
+          Force Arrow Scale: 0.05000000074505806
+          Force Color: 204; 51; 51
+          History Length: 1
+          Name: Wrench
+          Topic:
+            Depth: 5
+            Durability Policy: Volatile
+            Filter size: 10
+            History Policy: Keep Last
+            Reliability Policy: Reliable
+            Value: /tempest/thruster_wrenches/thruster_1
+          Torque Arrow Scale: 2
+          Torque Color: 204; 204; 51
+          Value: true
+        - Accept NaN Values: false
+          Alpha: 1
+          Arrow Width: 0.05000000074505806
+          Class: rviz_default_plugins/Wrench
+          Enabled: true
+          Force Arrow Scale: 0.05000000074505806
+          Force Color: 204; 51; 51
+          History Length: 1
+          Name: Wrench
+          Topic:
+            Depth: 5
+            Durability Policy: Volatile
+            Filter size: 10
+            History Policy: Keep Last
+            Reliability Policy: Reliable
+            Value: /tempest/thruster_wrenches/thruster_2
+          Torque Arrow Scale: 2
+          Torque Color: 204; 204; 51
+          Value: true
+        - Accept NaN Values: false
+          Alpha: 1
+          Arrow Width: 0.05000000074505806
+          Class: rviz_default_plugins/Wrench
+          Enabled: true
+          Force Arrow Scale: 0.05000000074505806
+          Force Color: 204; 51; 51
+          History Length: 1
+          Name: Wrench
+          Topic:
+            Depth: 5
+            Durability Policy: Volatile
+            Filter size: 10
+            History Policy: Keep Last
+            Reliability Policy: Reliable
+            Value: /tempest/thruster_wrenches/thruster_3
+          Torque Arrow Scale: 2
+          Torque Color: 204; 204; 51
+          Value: true
+        - Accept NaN Values: false
+          Alpha: 1
+          Arrow Width: 0.05000000074505806
+          Class: rviz_default_plugins/Wrench
+          Enabled: true
+          Force Arrow Scale: 0.05000000074505806
+          Force Color: 204; 51; 51
+          History Length: 1
+          Name: Wrench
+          Topic:
+            Depth: 5
+            Durability Policy: Volatile
+            Filter size: 10
+            History Policy: Keep Last
+            Reliability Policy: Reliable
+            Value: /tempest/thruster_wrenches/thruster_4
+          Torque Arrow Scale: 2
+          Torque Color: 204; 204; 51
+          Value: true
+        - Accept NaN Values: false
+          Alpha: 1
+          Arrow Width: 0.05000000074505806
+          Class: rviz_default_plugins/Wrench
+          Enabled: true
+          Force Arrow Scale: 0.05000000074505806
+          Force Color: 204; 51; 51
+          History Length: 1
+          Name: Wrench
+          Topic:
+            Depth: 5
+            Durability Policy: Volatile
+            Filter size: 10
+            History Policy: Keep Last
+            Reliability Policy: Reliable
+            Value: /tempest/thruster_wrenches/thruster_5
+          Torque Arrow Scale: 2
+          Torque Color: 204; 204; 51
+          Value: true
+        - Accept NaN Values: false
+          Alpha: 1
+          Arrow Width: 0.05000000074505806
+          Class: rviz_default_plugins/Wrench
+          Enabled: true
+          Force Arrow Scale: 0.05000000074505806
+          Force Color: 204; 51; 51
+          History Length: 1
+          Name: Wrench
+          Topic:
+            Depth: 5
+            Durability Policy: Volatile
+            Filter size: 10
+            History Policy: Keep Last
+            Reliability Policy: Reliable
+            Value: /tempest/thruster_wrenches/thruster_6
+          Torque Arrow Scale: 2
+          Torque Color: 204; 204; 51
+          Value: true
+        - Accept NaN Values: false
+          Alpha: 1
+          Arrow Width: 0.05000000074505806
+          Class: rviz_default_plugins/Wrench
+          Enabled: true
+          Force Arrow Scale: 0.05000000074505806
+          Force Color: 204; 51; 51
+          History Length: 1
+          Name: Wrench
+          Topic:
+            Depth: 5
+            Durability Policy: Volatile
+            Filter size: 10
+            History Policy: Keep Last
+            Reliability Policy: Reliable
+            Value: /tempest/thruster_wrenches/thruster_7
+          Torque Arrow Scale: 2
+          Torque Color: 204; 204; 51
+          Value: true
+      Enabled: true
+      Name: wrenches
+    - Class: riptide_rviz/DiagnosticOverlay
+      Enabled: true
+      Name: DiagnosticOverlay
       Value: true
+      diagnostic_timeout: 10
+      font: DejaVu Sans Mono
+      height: 128
+      hor_alignment: left
+      hor_dist: 0
+      robot_namespace: /tempest
+      ver_alignment: top
+      ver_dist: 0
+      width: 128
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
-    Fixed Frame: map
+    Fixed Frame: world
     Frame Rate: 30
   Name: root
   Tools:
@@ -351,7 +572,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/Orbit
-      Distance: 18.995210647583008
+      Distance: 7.1531171798706055
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -366,10 +587,10 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.8703979849815369
+      Pitch: 0.4353972375392914
       Target Frame: tempest/base_link
       Value: Orbit (rviz)
-      Yaw: 0.3403986096382141
+      Yaw: 5.978586196899414
     Saved: ~
 Window Geometry:
   Actuators:
@@ -380,14 +601,14 @@ Window Geometry:
     collapsed: false
   Displays:
     collapsed: false
-  Height: 1016
+  Height: 881
   Hide Left Dock: false
   Hide Right Dock: false
   Image:
     collapsed: false
   MissionPanel:
     collapsed: false
-  QMainWindow State: 000000ff00000000fd00000004000000000000019200000365fc020000000cfb0000001200530065006c0065006300740069006f006e00000001e10000009b0000005c00fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261fb0000001c005400720061006e00730066006f0072006d006100740069006f006e000000031f000000c10000007900fffffffb000000180043006f006e00740072006f006c00500061006e0065006c010000003b0000024d0000001600fffffffb00000012004100630074007500610074006f00720073010000028e000000980000001500fffffffb0000000c00430061006d00650072006100000002d0000000c70000000000000000fc0000032c000000740000001600fffffffa000000000100000002fb0000000e004200720069006e0067007500700100000000ffffffff0000006000fffffffb0000001c005400720061006e00730066006f0072006d006100740069006f006e0000000000000001820000008e00ffffff000000010000015600000365fc0200000006fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a0049006d006100670065010000003b000000f00000002800fffffffc000001310000026f000000e20100001afa000000000100000003fb00000018004d0069007300730069006f006e00500061006e0065006c0100000000ffffffff0000008100fffffffb000000100044006900730070006c0061007900730100000000ffffffff0000015600fffffffb0000000a0056006900650077007301000006710000010f0000010000fffffffb0000000a0049006d00610067006501000002d3000000cd0000000000000000fb0000000a0049006d00610067006501000002a8000000f80000000000000000fb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e100000197000000030000073600000037fc0100000002fb0000000800540069006d00650100000000000007360000025300fffffffb0000000800540069006d00650100000000000004500000000000000000000004420000036500000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  QMainWindow State: 000000ff00000000fd000000040000000000000179000002d8fc020000000cfb0000001200530065006c0065006300740069006f006e000000003d000000fb0000005c00fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261fb0000001c005400720061006e00730066006f0072006d006100740069006f006e000000031f000000c10000007b00fffffffb000000180043006f006e00740072006f006c00500061006e0065006c010000003d000001c00000001600fffffffb00000012004100630074007500610074006f007200730100000203000000940000001500fffffffb0000000c00430061006d00650072006100000002d0000000c70000000000000000fc0000029d000000780000001600fffffffa000000000100000002fb0000000e004200720069006e0067007500700100000000ffffffff0000006700fffffffb0000001c005400720061006e00730066006f0072006d006100740069006f006e0000000000000001820000009e00ffffff0000000100000156000002d8fc0200000006fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a0049006d006100670065000000003d000000c90000002800fffffffc0000003d000002d8000000e60100001cfa000000010100000003fb00000018004d0069007300730069006f006e00500061006e0065006c0100000000ffffffff0000008e00fffffffb000000100044006900730070006c0061007900730100000000ffffffff0000015600fffffffb0000000a0056006900650077007301000006710000010f0000010000fffffffb0000000a0049006d00610067006501000002d3000000cd0000000000000000fb0000000a0049006d00610067006501000002a8000000f80000000000000000fb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e10000019700000003000005e800000039fc0100000002fb0000000800540069006d00650100000000000005e8000002fb00fffffffb0000000800540069006d006501000000000000045000000000000000000000030d000002d800000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   Selection:
     collapsed: false
   Time:
@@ -398,6 +619,6 @@ Window Geometry:
     collapsed: false
   Views:
     collapsed: false
-  Width: 1846
-  X: 74
+  Width: 1512
+  X: 0
   Y: 27
