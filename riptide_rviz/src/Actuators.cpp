@@ -1,8 +1,10 @@
 #include "riptide_rviz/Actuators.hpp"
 #include <chrono>
+#include <rviz_common/logging.hpp>
 
 
 using namespace std::chrono_literals;
+using namespace std::placeholders;
 
 namespace riptide_rviz
 {
@@ -17,10 +19,10 @@ namespace riptide_rviz
         clientNode = std::make_shared<rclcpp::Node>("riptide_rviz_actuators", options);
 
         //strings below are placeholders
-        armTorpedoDropper = rclcpp::create_client<ArmTorpedoDropper>(clientNode, "/tempest/autonomy/run_tree");
-        changeClawState = rclcpp::create_client<ChangeClawState>(clientNode, "/tempest/autonomy/run_tree");
-        actuateTorpedos = rclcpp::create_client<ActuateTorpedos>(clientNode, "/tempest/autonomy/run_tree");
-        actuateDroppers = rclcpp::create_client<ActuateDroppers>(clientNode, "/tempest/autonomy/run_tree");
+        armTorpedoDropper = rclcpp_action::create_client<ArmTorpedoDropper>(clientNode, "/tempest/arm_actuators");
+        changeClawState = rclcpp_action::create_client<ChangeClawState>(clientNode, "/tempest/change_claw_state");
+        actuateTorpedos = rclcpp_action::create_client<ActuateTorpedos>(clientNode, "/tempest/actuate_torpedos");
+        actuateDroppers = rclcpp_action::create_client<ActuateDroppers>(clientNode, "/tempest/actuate_droppers");
     }
 
     void Actuators::onInitialize()
@@ -53,8 +55,6 @@ namespace riptide_rviz
 
     void Actuators::handleArming(bool arm_torpedos, bool arm_droppers)
     {
-       
-        
         auto goal = ArmTorpedoDropper::Goal();
         if (armed_flag) {
             goal.arm_torpedos = false;
@@ -64,8 +64,6 @@ namespace riptide_rviz
             goal.arm_droppers = arm_droppers;
         }
         
-        
-
         // create the goal callbacks to bind to
         auto sendGoalOptions = rclcpp_action::Client<ArmTorpedoDropper>::SendGoalOptions();
         sendGoalOptions.goal_response_callback =
@@ -76,15 +74,12 @@ namespace riptide_rviz
             std::bind(&Actuators::armTaskCompleteCb, this, _1);
 
         // send the goal with the callbacks configured
-        armTorpedoDropper->async_send_goal(goal, sendGoalOptions);
-            
-        
-        
+        armTorpedoDropper->async_send_goal(goal, sendGoalOptions); 
     }
 
-    void Actuators::armTaskStartCbD(const GHActuateDroppers::SharedPtr &goalHandle)
+    void Actuators::armTaskStartCb(const GHArmTorpedoDropper::SharedPtr &goalHandle)
     { 
-        if (!goal_handle) {
+        if (!goalHandle) {
             RVIZ_COMMON_LOG_ERROR("REJECTED: Failed to arm");
             
             // set the red stylesheet
@@ -92,48 +87,30 @@ namespace riptide_rviz
             uiPanel->actTorpArm->setStyleSheet("QPushButton{color:black; background: red;}");
 
             // create a timer to clear it in 1 second
-            QTimer::singleShot(1000, [this](void)
-                               { uiPanel->actDropArm->setStyleSheet("QPushButton{color:black; background: green;}");
-                               uiPanel->actTorpArm->setStyleSheet("QPushButton{color:black; background: green;}") });
+            QTimer::singleShot(
+                1000, 
+                [this](void) {
+                    uiPanel->actDropArm->setStyleSheet("QPushButton{color:black; background: green;}");
+                    uiPanel->actTorpArm->setStyleSheet("QPushButton{color:black; background: green;}"); 
+                }
+            );
         }
     }
 
-    void Actuators::armTaskCompleteCbDrops(const GHActuateDroppers::WrappedResult &result)
+    void Actuators::armTaskCompleteCb(const GHArmTorpedoDropper::WrappedResult &result)
     {
         // we can re-enable the staret button and disable the stop button
         uiPanel->actDropArm->setStyleSheet("QPushButton{color:black; background: green;}");
         uiPanel->actTorpArm->setStyleSheet("QPushButton{color:black; background: green;}");
     }
 
-    void Actuators::armTaskFeedbackCb(GHActuateDroppers::SharedPtr goalHandle,
-                                      ActuateDroppers::Feedback::ConstSharedPtr feedback)
+    void Actuators::armTaskFeedbackCb(GHArmTorpedoDropper::SharedPtr goalHandle,
+                                      ArmTorpedoDropper::Feedback::ConstSharedPtr feedback)
     {
         armed_flag = feedback->is_armed;
         if (armed_flag) {
             uiPanel->actDropArm->setStyleSheet("QPushButton{color:black; background: red;}");
             uiPanel->actTorpArm->setStyleSheet("QPushButton{color:black; background: red;}");
-        }
-        switch (result.code) {
-            case rclcpp_action::ResultCode::SUCCEEDED:
-                break;
-            case rclcpp_action::ResultCode::ABORTED:
-                RVIZ_COMMON_LOG_ERROR("ABORTED: Failed to arm");
-            
-                // set the red stylesheet
-                uiPanel->actDropArm->setStyleSheet("QPushButton{color:black; background: red;}");
-                uiPanel->actTorpArm->setStyleSheet("QPushButton{color:black; background: red;}");
-
-                // create a timer to clear it in 1 second
-                QTimer::singleShot(1000, [this](void)
-                                { uiPanel->actDropArm->setStyleSheet("QPushButton{color:black; background: green;}");
-                                uiPanel->actTorpArm->setStyleSheet("QPushButton{color:black; background: green;}") });
-                return;
-            case rclcpp_action::ResultCode::CANCELED:
-                RVIZ_COMMON_LOG_ERROR("CANCELED Acknowledged for arming");
-                return;
-            default:
-                RCLCPP_ERROR(this->get_logger(), "Unknown result code");
-                return;
         }
     }
 
@@ -148,21 +125,16 @@ namespace riptide_rviz
         auto sendGoalOptions = rclcpp_action::Client<ChangeClawState>::SendGoalOptions();
         sendGoalOptions.goal_response_callback =
             std::bind(&Actuators::clawTaskStartCb, this, _1);
-        sendGoalOptions.feedback_callback =
-            std::bind(&Actuators::clawTaskFeedbackCb, this, _1, _2);
         sendGoalOptions.result_callback =
             std::bind(&Actuators::clawTaskCompleteCb, this, _1);
 
         // send the goal with the callbacks configured
         changeClawState->async_send_goal(goal, sendGoalOptions);
-            
-        
-        
     }
 
-    void Actuators::clawTaskStartCbD(const GHActuateDroppers::SharedPtr &goalHandle)
+    void Actuators::clawTaskStartCb(const GHChangeClawState::SharedPtr &goalHandle)
     { 
-        if (!goal_handle) {
+        if (!goalHandle) {
             RVIZ_COMMON_LOG_ERROR("REJECTED: Failed to change claw state");
             
             // set the red stylesheet
@@ -170,43 +142,23 @@ namespace riptide_rviz
             uiPanel->actClawClose->setStyleSheet("QPushButton{color:black; background: red;}");
 
             // create a timer to clear it in 1 second
-            QTimer::singleShot(1000, [this](void)
-                               { uiPanel->actClawOpen->setStyleSheet("");
-                               uiPanel->actClawClose->setStyleSheet("") });
+            QTimer::singleShot(
+                1000, 
+                [this](void) {
+                    uiPanel->actClawOpen->setStyleSheet("");
+                    uiPanel->actClawClose->setStyleSheet(""); 
+                }
+            );
         }
     }
 
-    void Actuators::clawTaskCompleteCbDrops(const GHActuateDroppers::WrappedResult &result)
+    void Actuators::clawTaskCompleteCb(const GHChangeClawState::WrappedResult &result)
     {
         // we can re-enable the staret button and disable the stop button
+        uiPanel->actClawOpen->setEnabled(true);
+        uiPanel->actClawClose->setEnabled(false);
     }
 
-    void Actuators::clawTaskFeedbackCb(GHActuateDroppers::SharedPtr goalHandle,
-                                      ActuateDroppers::Feedback::ConstSharedPtr feedback)
-    {
-        switch (result.code) {
-            case rclcpp_action::ResultCode::SUCCEEDED:
-                break;
-            case rclcpp_action::ResultCode::ABORTED:
-                RVIZ_COMMON_LOG_ERROR("ABORTED: Failed to change claw state");
-            
-                // set the red stylesheet
-                uiPanel->actClawOpen->setStyleSheet("QPushButton{color:black; background: red;}");
-                uiPanel->actClawClose->setStyleSheet("QPushButton{color:black; background: red;}");
-
-                // create a timer to clear it in 1 second
-                QTimer::singleShot(1000, [this](void)
-                                { uiPanel->actClawOpen->setStyleSheet("");
-                                uiPanel->actClawClose->setStyleSheet("") });
-                return;
-            case rclcpp_action::ResultCode::CANCELED:
-                RVIZ_COMMON_LOG_ERROR("CANCELED Acknowledged for claw");
-                return;
-            default:
-                RCLCPP_ERROR(this->get_logger(), "Unknown result code");
-                return;
-        }
-    }
 
     void Actuators::handleDroppers(int dropper_id)
     {
@@ -220,35 +172,25 @@ namespace riptide_rviz
             auto sendGoalOptions = rclcpp_action::Client<ActuateDroppers>::SendGoalOptions();
             sendGoalOptions.goal_response_callback =
                 std::bind(&Actuators::dropperTaskStartCb, this, _1);
-            sendGoalOptions.feedback_callback =
-                std::bind(&Actuators::dropperTaskFeedbackCb, this, _1, _2);
             sendGoalOptions.result_callback =
                 std::bind(&Actuators::dropperTaskCompleteCb, this, _1);
 
             // send the goal with the callbacks configured
             actuateDroppers->async_send_goal(goal, sendGoalOptions);
-            
         }
-        
     }
 
-    void Actuators::dropperTaskStartCbD(const GHActuateDroppers::SharedPtr &goalHandle)
+    void Actuators::dropperTaskStartCb(const GHActuateDropper::SharedPtr &goalHandle)
     { 
-            uiPanel->actDrop1->setEnabled(false);
-            uiPanel->actDrop2->setEnabled(false);
+        uiPanel->actDrop1->setEnabled(false);
+        uiPanel->actDrop2->setEnabled(false);
             
     }
 
-    void Actuators::dropperTaskCompleteCbDrops(const GHActuateDroppers::WrappedResult &result)
+    void Actuators::dropperTaskCompleteCb(const GHActuateDropper::WrappedResult &result)
     {
         // we can re-enable the staret button and disable the stop button
         uiPanel->actDropArm->setEnabled(true);
-    }
-
-    void Actuators::dropperTaskFeedbackCb(GHActuateDroppers::SharedPtr goalHandle,
-                                      ActuateDroppers::Feedback::ConstSharedPtr feedback)
-    {
-        //TODO figure out how to render the stack
     }
 
     void Actuators::handleTorpedos(int torpedo_id)
@@ -263,16 +205,12 @@ namespace riptide_rviz
             auto sendGoalOptions = rclcpp_action::Client<ActuateTorpedos>::SendGoalOptions();
             sendGoalOptions.goal_response_callback =
                 std::bind(&Actuators::torpedoTaskStartCb, this, _1);
-            sendGoalOptions.feedback_callback =
-                std::bind(&Actuators::torpedoTaskFeedbackCb, this, _1, _2);
             sendGoalOptions.result_callback =
                 std::bind(&Actuators::torpedoTaskCompleteCb, this, _1);
 
             // send the goal with the callbacks configured
-            actuateTorpedos->async_send_goal(goal, sendGoalOptions);
-            
+            actuateTorpedos->async_send_goal(goal, sendGoalOptions);   
         }
-        
     }
 
     void Actuators::torpedoTaskStartCb(const GHActuateTorpedos::SharedPtr &goalHandle)
@@ -288,12 +226,6 @@ namespace riptide_rviz
         uiPanel->actTorpArm->setEnabled(true);
     }
 
-    void Actuators::torpedoTaskFeedbackCb(GHActuateTorpedos::SharedPtr goalHandle,
-                                      ActuateTorpedos::Feedback::ConstSharedPtr feedback)
-    {
-        //TODO figure out how to render the stack
-    }
-
     void Actuators::load(const rviz_common::Config &config)
     {
         rviz_common::Panel::load(config);
@@ -307,9 +239,7 @@ namespace riptide_rviz
     bool Actuators::event(QEvent *event)
     {
     }
-    
-    void Actuators::arm()
-    
+        
     Actuators::~Actuators()
     {
         // master window control removal
