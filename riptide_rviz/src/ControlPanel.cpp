@@ -26,6 +26,8 @@ namespace riptide_rviz
 
         // create the default message
         ctrlMode = riptide_msgs2::msg::ControllerCommand::DISABLED;
+
+        RVIZ_COMMON_LOG_INFO("Constructed control panel");
     }
 
     void ControlPanel::onInitialize()
@@ -36,19 +38,6 @@ namespace riptide_rviz
         connect(spinTimer, &QTimer::timeout, [this](void)
                 { rclcpp::spin_some(clientNode); });
         spinTimer->start(50);
-
-        uiTimer = new QTimer(this);
-        connect(uiTimer, &QTimer::timeout, [this](void)
-                { refreshUI(); });
-        uiTimer->start(100);
-
-        // make ROS timers
-        killPubTimer = clientNode->create_wall_timer(50ms, std::bind(&ControlPanel::sendKillMsgTimer, this));
-
-        // setup goal_pose sub
-        selectPoseSub = clientNode->create_subscription<geometry_msgs::msg::PoseStamped>(
-            "goal_pose", rclcpp::SystemDefaultsQoS(),
-            std::bind(&ControlPanel::selectedPose, this, _1)); 
 
         // Connect UI signals for controlling the riptide vehicle
         connect(uiPanel->ctrlEnable, &QPushButton::clicked, [this](void)
@@ -79,13 +68,16 @@ namespace riptide_rviz
                 { handleCurrent(); });
         connect(uiPanel->CtrlSendCmd, &QPushButton::clicked, [this](void)
                 { handleCommand(); });
+
+        RVIZ_COMMON_LOG_INFO("Initialized control panel");
     }
 
     void ControlPanel::load(const rviz_common::Config &config)
     {
-        // RVIZ_COMMON_LOG_INFO("Loading config");
         // load the parent class config
         rviz_common::Panel::load(config);
+
+        RVIZ_COMMON_LOG_INFO("Loaded parent panel config");
 
         // create our value containers
         QString * str = new QString();
@@ -128,6 +120,16 @@ namespace riptide_rviz
         delete str;
         delete configVal; 
 
+        // create the timer but hold on starting it as things may not have been fully initialized yet
+        uiTimer = new QTimer(this);
+        connect(uiTimer, &QTimer::timeout, [this](void)
+                { refreshUI(); });
+
+        // setup goal_pose sub
+        selectPoseSub = clientNode->create_subscription<geometry_msgs::msg::PoseStamped>(
+            "goal_pose", rclcpp::SystemDefaultsQoS(),
+            std::bind(&ControlPanel::selectedPose, this, _1)); 
+
         // setup the ROS topics that depend on namespace
         // make publishers
         killStatePub = clientNode->create_publisher<riptide_msgs2::msg::KillSwitchReport>(robot_ns + "/control/software_kill", rclcpp::SystemDefaultsQoS());
@@ -140,7 +142,15 @@ namespace riptide_rviz
             std::bind(&ControlPanel::odomCallback, this, _1));
         steadySub = clientNode->create_subscription<std_msgs::msg::Bool>(
             robot_ns + "/controller/steady", rclcpp::SystemDefaultsQoS(),
-            std::bind(&ControlPanel::steadyCallback, this, _1));          
+            std::bind(&ControlPanel::steadyCallback, this, _1));  
+
+        // now we can start the UI refresh timer
+        uiTimer->start(100);
+        
+        // and start the kill switch pub timer
+        killPubTimer = clientNode->create_wall_timer(50ms, std::bind(&ControlPanel::sendKillMsgTimer, this));
+
+        RVIZ_COMMON_LOG_INFO("Loading config complete");
     }
 
     void ControlPanel::save(rviz_common::Config config) const
