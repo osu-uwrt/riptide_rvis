@@ -50,7 +50,7 @@ namespace riptide_rviz
         );
 
         killSub = nodeHandle->create_subscription<riptide_msgs2::msg::RobotState>(
-            robotNsProperty->getStdString() + std::string("/state/firmware"), rclcpp::SystemDefaultsQoS(), std::bind(&DiagnosticOverlay::killCallback, this, _1)
+            robotNsProperty->getStdString() + std::string("/state/robot"), rclcpp::SystemDefaultsQoS(), std::bind(&DiagnosticOverlay::killCallback, this, _1)
         );
 
         // watchdog timers for handling timeouts
